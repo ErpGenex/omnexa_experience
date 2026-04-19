@@ -25,8 +25,7 @@ required_apps = ["omnexa_core", "omnexa_accounting"]
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/omnexa_experience/css/omnexa_experience.css"
-# app_include_js = "/assets/omnexa_experience/js/omnexa_experience.js"
+# Desk theme (ERPGenEx Theme 0426) is loaded by omnexa_theme_manager.
 
 # include js, css files in header of web template
 web_include_css = "/assets/omnexa_experience/css/design_tokens.css"
@@ -52,10 +51,7 @@ before_request = [
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 
-# include js in doctype views
-doctype_js = {
-	"Experience Tenant Theme": "public/js/experience_tenant_theme.js",
-}
+# include js in doctype views (Experience Tenant Theme: omnexa_theme_manager)
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}

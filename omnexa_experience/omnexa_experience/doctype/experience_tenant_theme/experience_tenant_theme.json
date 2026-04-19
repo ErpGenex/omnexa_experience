@@ -6,7 +6,9 @@
  "engine": "InnoDB",
  "field_order": [
   "company",
+  "theme_preset",
   "apply_to_public_site",
+  "apply_to_desk",
   "section_colors",
   "primary_color",
   "primary_contrast",
@@ -15,6 +17,10 @@
   "foreground_color",
   "section_typography",
   "font_stack_for_web",
+  "desk_theme_mode",
+  "desk_base_font_size",
+  "desk_ui_density",
+  "desk_radius_scale",
   "section_brand_assets",
   "logo",
   "logo_url",
@@ -35,11 +41,26 @@
    "reqd": 1
   },
   {
+   "default": "erpgenex_theme_0426",
+   "fieldname": "theme_preset",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Theme preset",
+   "options": "erpgenex_theme_0426\nglobal_minimal_light\nglobal_midnight_blue"
+  },
+  {
    "default": "0",
    "description": "When enabled, this row becomes the only active public-web token override for the site (others are cleared).",
    "fieldname": "apply_to_public_site",
    "fieldtype": "Check",
    "label": "Apply to public website"
+  },
+  {
+   "default": "1",
+   "description": "When enabled, this row becomes the active Desk / ERP theme for users of the same company.",
+   "fieldname": "apply_to_desk",
+   "fieldtype": "Check",
+   "label": "Apply to Desk / ERP"
   },
   {
    "fieldname": "section_colors",
@@ -86,6 +107,34 @@
    "fieldname": "font_stack_for_web",
    "fieldtype": "Data",
    "label": "Font stack (sans)"
+  },
+  {
+   "default": "auto",
+   "fieldname": "desk_theme_mode",
+   "fieldtype": "Select",
+   "label": "Desk theme mode",
+   "options": "auto\nlight\ndark"
+  },
+  {
+   "default": "16px",
+   "fieldname": "desk_base_font_size",
+   "fieldtype": "Select",
+   "label": "Desk base font size",
+   "options": "14px\n15px\n16px\n17px\n18px"
+  },
+  {
+   "default": "comfortable",
+   "fieldname": "desk_ui_density",
+   "fieldtype": "Select",
+   "label": "Desk UI density",
+   "options": "compact\ncomfortable\nspacious"
+  },
+  {
+   "default": "soft",
+   "fieldname": "desk_radius_scale",
+   "fieldtype": "Select",
+   "label": "Desk radius style",
+   "options": "classic\nsoft\nrounded"
   },
   {
    "fieldname": "section_brand_assets",

@@ -45,6 +45,7 @@ from omnexa_experience.omnexa_experience.theme_preview import (
 	before_request_theme_preview,
 	create_theme_preview_token,
 )
+from omnexa_theme_manager.desk_theme import get_desk_theme_payload
 from omnexa_experience.omnexa_experience.doctype.experience_tenant_theme.experience_tenant_theme import (
 	compare_themes,
 	list_theme_publish_history,
@@ -674,7 +675,8 @@ class TestOmnexaExperience(FrappeTestCase):
 			self.assertIn(HEAD_MARKER, h)
 			self.assertIn('rel="icon"', h)
 			self.assertIn("https://example.com/favicon.ico", h)
-			self.assertNotIn("omnexa-experience-tenant-theme", h)
+			self.assertIn("omnexa-experience-tenant-theme", h)
+			self.assertIn("--ox-primary: #2563eb", h)
 		finally:
 			frappe.delete_doc("Experience Tenant Theme", t.name, force=True, ignore_permissions=True)
 
@@ -853,3 +855,23 @@ class TestOmnexaExperience(FrappeTestCase):
 		finally:
 			frappe.delete_doc("Experience Tenant Theme", b.name, force=True, ignore_permissions=True)
 			frappe.delete_doc("Experience Tenant Theme", a.name, force=True, ignore_permissions=True)
+
+	def test_desk_theme_payload_uses_erpgenex_theme_0426_defaults(self):
+		company_c = create_test_company("OMNX-DESKTHEME")
+		t = frappe.new_doc("Experience Tenant Theme")
+		t.company = company_c
+		t.theme_preset = "erpgenex_theme_0426"
+		t.apply_to_desk = 1
+		t.insert(ignore_permissions=True)
+		prev_user = frappe.session.user
+		try:
+			frappe.session.user = "Administrator"
+			frappe.defaults.set_user_default("Company", company_c, user="Administrator")
+			out = get_desk_theme_payload()
+			self.assertTrue(out["ok"])
+			self.assertEqual(out["theme"]["preset"], "erpgenex_theme_0426")
+			self.assertEqual(out["theme"]["tokens"]["primary_color"], "#2563eb")
+			self.assertEqual(out["theme"]["tokens"]["desk_base_font_size"], "16px")
+		finally:
+			frappe.session.user = prev_user
+			frappe.delete_doc("Experience Tenant Theme", t.name, force=True, ignore_permissions=True)

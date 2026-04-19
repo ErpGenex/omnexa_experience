@@ -11,6 +11,8 @@ from frappe.model.document import Document
 from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, now_datetime, validate_url
 
+from omnexa_theme_manager.theme_presets import get_theme_preset
+
 _HEX6 = re.compile(r"^#[0-9A-Fa-f]{6}$")
 _FONT_STACK_SAFE = re.compile(r"^[a-zA-Z0-9, \-\.'\"]{1,200}$")
 _UNSAFE_URL_CHARS = re.compile(r'["\'\\<>\n\r]')
@@ -18,6 +20,10 @@ _MAX_ASSET_URL_LEN = 2048
 
 # WCAG 2.2 §1.4.11 (non-text): minimum ~3:1 for UI components; we enforce 3:1 when both primary colors are set.
 _MIN_PRIMARY_CONTRAST_RATIO = 3.0
+_THEME_MODE = {"auto", "light", "dark"}
+_FONT_SIZES = {"14px", "15px", "16px", "17px", "18px"}
+_UI_DENSITY = {"compact", "comfortable", "spacious"}
+_RADIUS_SCALE = {"classic", "soft", "rounded"}
 
 
 def _hex_to_srgb_channels(hex6: str) -> tuple[float, float, float]:
@@ -87,7 +93,26 @@ def _norm_asset_url(label: str, value: str | None) -> str | None:
 
 
 class ExperienceTenantTheme(Document):
+	def _apply_preset_defaults(self):
+		preset = get_theme_preset(getattr(self, "theme_preset", None))
+		for fieldname in (
+			"primary_color",
+			"primary_contrast",
+			"background_color",
+			"surface_color",
+			"foreground_color",
+			"font_stack_for_web",
+			"desk_theme_mode",
+			"desk_base_font_size",
+			"desk_ui_density",
+			"desk_radius_scale",
+		):
+			if not (getattr(self, fieldname, None) or "").strip():
+				setattr(self, fieldname, preset.get(fieldname))
+
 	def validate(self):
+		self.theme_preset = (self.theme_preset or "erpgenex_theme_0426").strip() or "erpgenex_theme_0426"
+		self._apply_preset_defaults()
 		self.primary_color = _norm_hex(_("Primary"), self.primary_color)
 		self.primary_contrast = _norm_hex(_("Primary contrast"), self.primary_contrast)
 		self.background_color = _norm_hex(_("Background"), self.background_color)
@@ -99,6 +124,14 @@ class ExperienceTenantTheme(Document):
 		self.logo_url = _norm_asset_url(_("Logo URL"), self.logo_url)
 		self.favicon = _norm_asset_url(_("Favicon"), self.favicon)
 		self.favicon_url = _norm_asset_url(_("Favicon URL"), self.favicon_url)
+		if self.desk_theme_mode not in _THEME_MODE:
+			frappe.throw(_("Desk theme mode must be auto, light, or dark."), title=_("Theme"))
+		if self.desk_base_font_size not in _FONT_SIZES:
+			frappe.throw(_("Desk base font size must be one of {0}.").format(", ".join(sorted(_FONT_SIZES))), title=_("Theme"))
+		if self.desk_ui_density not in _UI_DENSITY:
+			frappe.throw(_("Desk UI density must be one of {0}.").format(", ".join(sorted(_UI_DENSITY))), title=_("Theme"))
+		if self.desk_radius_scale not in _RADIUS_SCALE:
+			frappe.throw(_("Desk radius style must be one of {0}.").format(", ".join(sorted(_RADIUS_SCALE))), title=_("Theme"))
 		if self.primary_color and self.primary_contrast:
 			ratio = _contrast_ratio(self.primary_contrast, self.primary_color)
 			if ratio + 1e-9 < _MIN_PRIMARY_CONTRAST_RATIO:
@@ -120,6 +153,17 @@ class ExperienceTenantTheme(Document):
 					and name != %(name)s
 				""",
 				{"name": self.name or ""},
+			)
+		if cint(getattr(self, "apply_to_desk", 0)):
+			frappe.db.sql(
+				"""
+				update `tabExperience Tenant Theme`
+				set apply_to_desk = 0
+				where coalesce(apply_to_desk, 0) = 1
+					and company = %(company)s
+					and name != %(name)s
+				""",
+				{"company": self.company, "name": self.name or ""},
 			)
 
 
@@ -145,13 +189,19 @@ def _theme_snapshot(doc) -> dict:
 	return {
 		"name": doc.name,
 		"company": doc.company,
+		"theme_preset": doc.theme_preset or "erpgenex_theme_0426",
 		"apply_to_public_site": cint(doc.apply_to_public_site) or 0,
+		"apply_to_desk": cint(doc.apply_to_desk) or 0,
 		"primary_color": doc.primary_color or "",
 		"primary_contrast": doc.primary_contrast or "",
 		"background_color": doc.background_color or "",
 		"surface_color": doc.surface_color or "",
 		"foreground_color": doc.foreground_color or "",
 		"font_stack_for_web": doc.font_stack_for_web or "",
+		"desk_theme_mode": doc.desk_theme_mode or "auto",
+		"desk_base_font_size": doc.desk_base_font_size or "16px",
+		"desk_ui_density": doc.desk_ui_density or "comfortable",
+		"desk_radius_scale": doc.desk_radius_scale or "soft",
 		"logo": doc.logo or "",
 		"logo_url": doc.logo_url or "",
 		"favicon": doc.favicon or "",
@@ -255,12 +305,18 @@ def compare_themes(theme_a: str | None = None, theme_b: str | None = None, compa
 	snap_b = _theme_snapshot(doc_b)
 	keys = [
 		"apply_to_public_site",
+		"apply_to_desk",
+		"theme_preset",
 		"primary_color",
 		"primary_contrast",
 		"background_color",
 		"surface_color",
 		"foreground_color",
 		"font_stack_for_web",
+		"desk_theme_mode",
+		"desk_base_font_size",
+		"desk_ui_density",
+		"desk_radius_scale",
 		"logo",
 		"logo_url",
 		"favicon",
@@ -279,3 +335,82 @@ def compare_themes(theme_a: str | None = None, theme_b: str | None = None, compa
 		"diff_count": len(diffs),
 		"diffs": diffs,
 	}
+
+
+_JSON_IMPORT_FIELDS = (
+	"company",
+	"theme_preset",
+	"apply_to_public_site",
+	"apply_to_desk",
+	"primary_color",
+	"primary_contrast",
+	"background_color",
+	"surface_color",
+	"foreground_color",
+	"font_stack_for_web",
+	"desk_theme_mode",
+	"desk_base_font_size",
+	"desk_ui_density",
+	"desk_radius_scale",
+	"logo",
+	"logo_url",
+	"favicon",
+	"favicon_url",
+)
+
+
+def _apply_theme_payload(doc: Document, data: dict) -> None:
+	for k in _JSON_IMPORT_FIELDS:
+		if k not in data:
+			continue
+		val = data.get(k)
+		if val is None:
+			continue
+		if k in ("apply_to_public_site", "apply_to_desk"):
+			setattr(doc, k, cint(val))
+		else:
+			setattr(doc, k, val)
+
+
+@frappe.whitelist(methods=["POST"])
+@rate_limit(limit=30, seconds=60, methods=["POST"])
+def activate_desk_theme(theme: str | None = None):
+	"""Set this row as the active Desk theme for its company."""
+	_assert_theme_admin()
+	doc = _get_theme_doc(theme)
+	doc.apply_to_desk = 1
+	doc.save(ignore_permissions=True)
+	return {"ok": True, "name": doc.name, "company": doc.company}
+
+
+@frappe.whitelist(methods=["GET"])
+@rate_limit(limit=60, seconds=60, methods=["GET"])
+def export_theme_json(theme: str | None = None):
+	"""Export a snapshot suitable for backup / import."""
+	_assert_theme_admin()
+	doc = _get_theme_doc(theme)
+	return {"ok": True, "snapshot": _theme_snapshot(doc)}
+
+
+@frappe.whitelist(methods=["POST"])
+@rate_limit(limit=20, seconds=60, methods=["POST"])
+def import_theme_json(theme: str | None = None, payload: str | dict | None = None):
+	"""Create or update a theme from JSON (export_theme_json snapshot or a subset of fields)."""
+	_assert_theme_admin()
+	if payload is None:
+		frappe.throw(_("Payload required."), title=_("Theme"))
+	data = frappe.parse_json(payload) if isinstance(payload, str) else payload
+	if not isinstance(data, dict):
+		frappe.throw(_("Payload must be a JSON object."), title=_("Theme"))
+	if theme:
+		doc = _get_theme_doc(theme)
+		_apply_theme_payload(doc, data)
+		doc.save(ignore_permissions=True)
+		return {"ok": True, "name": doc.name}
+	company = data.get("company")
+	if not company or not frappe.db.exists("Company", company):
+		frappe.throw(_("Payload must include a valid company for new themes."), title=_("Theme"))
+	doc = frappe.new_doc("Experience Tenant Theme")
+	_apply_theme_payload(doc, data)
+	doc.insert(ignore_permissions=True)
+	return {"ok": True, "name": doc.name}
