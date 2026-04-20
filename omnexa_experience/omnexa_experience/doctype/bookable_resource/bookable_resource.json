@@ -5,13 +5,22 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "company",
   "resource_name",
+  "scheduling_section",
   "slot_duration_minutes",
   "buffer_minutes",
-  "timezone"
+  "timezone",
+  "control_section",
+  "resource_owner"
  ],
  "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Resource Identity"
+  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -26,6 +35,11 @@
    "in_list_view": 1,
    "label": "Resource Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "scheduling_section",
+   "fieldtype": "Section Break",
+   "label": "Scheduling"
   },
   {
    "default": "30",
@@ -47,6 +61,17 @@
    "fieldname": "timezone",
    "fieldtype": "Data",
    "label": "Timezone"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "resource_owner",
+   "fieldtype": "Link",
+   "label": "Resource Owner",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,

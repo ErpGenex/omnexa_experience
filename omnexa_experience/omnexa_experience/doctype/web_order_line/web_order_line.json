@@ -5,13 +5,22 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "catalog_item",
+  "line_note",
   "qty",
   "rate",
   "amount",
-  "tax_amount"
+  "tax_amount",
+  "control_section",
+  "line_reference"
  ],
  "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Order Line Identity"
+  },
   {
    "fieldname": "catalog_item",
    "fieldtype": "Link",
@@ -19,6 +28,11 @@
    "label": "Catalog Item",
    "options": "Catalog Item",
    "reqd": 1
+  },
+  {
+   "fieldname": "line_note",
+   "fieldtype": "Data",
+   "label": "Line Note"
   },
   {
    "default": "1",
@@ -45,6 +59,16 @@
    "fieldname": "tax_amount",
    "fieldtype": "Currency",
    "label": "Tax Amount"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "line_reference",
+   "fieldtype": "Data",
+   "label": "Line Reference"
   }
  ],
  "istable": 1,

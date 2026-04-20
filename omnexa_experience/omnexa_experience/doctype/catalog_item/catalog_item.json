@@ -6,17 +6,26 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "company",
   "commerce_segment",
   "slug",
   "title_en",
   "title_ar",
+  "classification_section",
   "item_type",
   "internal_item_code",
   "eta_item_code",
+  "control_section",
+  "classification_code",
   "published"
  ],
  "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Catalog Identity"
+  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -52,6 +61,11 @@
    "label": "Title (AR)"
   },
   {
+   "fieldname": "classification_section",
+   "fieldtype": "Section Break",
+   "label": "Type and Mapping"
+  },
+  {
    "default": "product",
    "fieldname": "item_type",
    "fieldtype": "Select",
@@ -70,6 +84,16 @@
    "fieldname": "eta_item_code",
    "fieldtype": "Data",
    "label": "ETA / EGS Item Code"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "classification_code",
+   "fieldtype": "Data",
+   "label": "Classification Code"
   },
   {
    "default": "0",

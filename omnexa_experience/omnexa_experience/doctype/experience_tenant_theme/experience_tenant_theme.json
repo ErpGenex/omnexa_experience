@@ -5,6 +5,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "company",
   "theme_preset",
   "apply_to_public_site",
@@ -29,9 +30,18 @@
   "section_publish",
   "published_at",
   "published_by",
-  "publish_note"
+  "publish_note",
+  "governance_section",
+  "change_ticket",
+  "control_section",
+  "owner_user"
  ],
  "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -187,6 +197,27 @@
    "fieldtype": "Small Text",
    "label": "Publish Note",
    "read_only": 1
+  },
+  {
+   "fieldname": "governance_section",
+   "fieldtype": "Section Break",
+   "label": "Governance"
+  },
+  {
+   "fieldname": "change_ticket",
+   "fieldtype": "Data",
+   "label": "Change Ticket"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "owner_user",
+   "fieldtype": "Link",
+   "label": "Owner",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,

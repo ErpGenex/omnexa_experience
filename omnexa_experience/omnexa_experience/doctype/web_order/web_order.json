@@ -6,19 +6,31 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "company",
   "branch",
   "commerce_segment",
+  "channel_section",
   "order_channel",
   "expected_fulfillment_date",
+  "customer_section",
   "customer_email",
   "idempotency_key",
   "status",
+  "lines_section",
   "lines",
   "grand_total",
-  "sales_invoice"
+  "sales_invoice",
+  "reporting_tag",
+  "control_section",
+  "external_reference"
  ],
  "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Order Identity"
+  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -43,6 +55,11 @@
    "options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
   },
   {
+   "fieldname": "channel_section",
+   "fieldtype": "Section Break",
+   "label": "Channel and Fulfillment"
+  },
+  {
    "default": "offline_web",
    "fieldname": "order_channel",
    "fieldtype": "Select",
@@ -54,6 +71,11 @@
    "fieldname": "expected_fulfillment_date",
    "fieldtype": "Date",
    "label": "Expected fulfillment date"
+  },
+  {
+   "fieldname": "customer_section",
+   "fieldtype": "Section Break",
+   "label": "Customer"
   },
   {
    "fieldname": "customer_email",
@@ -76,6 +98,11 @@
    "reqd": 1
   },
   {
+   "fieldname": "lines_section",
+   "fieldtype": "Section Break",
+   "label": "Lines and Totals"
+  },
+  {
    "fieldname": "lines",
    "fieldtype": "Table",
    "label": "Lines",
@@ -94,6 +121,21 @@
    "label": "Sales Invoice",
    "options": "Sales Invoice",
    "read_only": 1
+  },
+  {
+   "fieldname": "reporting_tag",
+   "fieldtype": "Data",
+   "label": "Reporting Tag"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "external_reference",
+   "fieldtype": "Data",
+   "label": "External Reference"
   }
  ],
  "grid_page_length": 50,
@@ -157,12 +199,30 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [
-  {"color": "Gray", "title": "Draft"},
-  {"color": "Orange", "title": "Pending Payment"},
-  {"color": "Blue", "title": "Invoiced"},
-  {"color": "Green", "title": "Fulfilled"},
-  {"color": "Purple", "title": "Closed"},
-  {"color": "Red", "title": "Cancelled"}
+  {
+   "color": "Gray",
+   "title": "Draft"
+  },
+  {
+   "color": "Orange",
+   "title": "Pending Payment"
+  },
+  {
+   "color": "Blue",
+   "title": "Invoiced"
+  },
+  {
+   "color": "Green",
+   "title": "Fulfilled"
+  },
+  {
+   "color": "Purple",
+   "title": "Closed"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
  ],
  "track_changes": 1
 }

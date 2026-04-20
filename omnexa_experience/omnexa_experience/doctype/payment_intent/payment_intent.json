@@ -5,15 +5,26 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "company",
   "web_order",
   "sales_invoice",
+  "amount_section",
   "amount",
   "currency",
+  "gateway_section",
   "client_secret_ref",
-  "status"
+  "status",
+  "payment_reference",
+  "control_section",
+  "external_reference"
  ],
  "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Payment Identity"
+  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -35,6 +46,11 @@
    "options": "Sales Invoice"
   },
   {
+   "fieldname": "amount_section",
+   "fieldtype": "Section Break",
+   "label": "Amount"
+  },
+  {
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -47,6 +63,11 @@
    "fieldtype": "Data",
    "label": "Currency",
    "reqd": 1
+  },
+  {
+   "fieldname": "gateway_section",
+   "fieldtype": "Section Break",
+   "label": "Gateway"
   },
   {
    "fieldname": "client_secret_ref",
@@ -62,6 +83,21 @@
    "label": "Status",
    "options": "requires_payment_method\nrequires_confirmation\nprocessing\nsucceeded\ncanceled\nfailed\nrefunded",
    "reqd": 1
+  },
+  {
+   "fieldname": "payment_reference",
+   "fieldtype": "Data",
+   "label": "Payment Reference"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "external_reference",
+   "fieldtype": "Data",
+   "label": "External Reference"
   }
  ],
  "grid_page_length": 50,

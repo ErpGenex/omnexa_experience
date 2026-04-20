@@ -6,18 +6,29 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "identity_section",
   "company",
   "branch",
   "commerce_segment",
+  "schedule_section",
   "bookable_resource",
   "start_datetime",
   "end_datetime",
+  "customer_section",
   "customer_email",
   "payment_intent",
   "status",
-  "hold_expires_at"
+  "hold_expires_at",
+  "booking_reference",
+  "control_section",
+  "external_reference"
  ],
  "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Booking Identity"
+  },
   {
    "fieldname": "company",
    "fieldtype": "Link",
@@ -42,6 +53,11 @@
    "options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
   },
   {
+   "fieldname": "schedule_section",
+   "fieldtype": "Section Break",
+   "label": "Schedule"
+  },
+  {
    "fieldname": "bookable_resource",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -62,6 +78,11 @@
    "in_list_view": 1,
    "label": "End",
    "reqd": 1
+  },
+  {
+   "fieldname": "customer_section",
+   "fieldtype": "Section Break",
+   "label": "Customer and Payment"
   },
   {
    "fieldname": "customer_email",
@@ -88,6 +109,21 @@
    "fieldname": "hold_expires_at",
    "fieldtype": "Datetime",
    "label": "Hold Expires At"
+  },
+  {
+   "fieldname": "booking_reference",
+   "fieldtype": "Data",
+   "label": "Booking Reference"
+  },
+  {
+   "fieldname": "control_section",
+   "fieldtype": "Section Break",
+   "label": "Control"
+  },
+  {
+   "fieldname": "external_reference",
+   "fieldtype": "Data",
+   "label": "External Reference"
   }
  ],
  "grid_page_length": 50,
@@ -141,12 +177,30 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [
-  {"color": "Gray", "title": "Draft"},
-  {"color": "Yellow", "title": "Hold"},
-  {"color": "Blue", "title": "Confirmed"},
-  {"color": "Green", "title": "CheckedIn"},
-  {"color": "Purple", "title": "Completed"},
-  {"color": "Red", "title": "Cancelled"}
+  {
+   "color": "Gray",
+   "title": "Draft"
+  },
+  {
+   "color": "Yellow",
+   "title": "Hold"
+  },
+  {
+   "color": "Blue",
+   "title": "Confirmed"
+  },
+  {
+   "color": "Green",
+   "title": "CheckedIn"
+  },
+  {
+   "color": "Purple",
+   "title": "Completed"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
  ],
  "track_changes": 1
 }
