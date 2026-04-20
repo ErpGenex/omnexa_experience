@@ -2,10 +2,13 @@
  "actions": [],
  "autoname": "hash",
  "creation": "2026-04-13 00:00:00",
+ "description": "Resource booking lifecycle with explicit states for operations and customer journey (service delivery / SLA).",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "company",
+  "branch",
+  "commerce_segment",
   "bookable_resource",
   "start_datetime",
   "end_datetime",
@@ -22,6 +25,21 @@
    "label": "Company",
    "options": "Company",
    "reqd": 1
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "description": "Vertical slice for analytics (aligns with Company industry / operating model).",
+   "fieldname": "commerce_segment",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Commerce segment",
+   "options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
   },
   {
    "fieldname": "bookable_resource",
@@ -62,7 +80,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Draft\nConfirmed\nCancelled",
+   "options": "Draft\nHold\nConfirmed\nCheckedIn\nCompleted\nCancelled",
    "reqd": 1
   },
   {
@@ -75,7 +93,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-15 12:00:00",
+ "modified": "2026-04-19 23:00:00",
  "modified_by": "Administrator",
  "module": "Omnexa Experience",
  "name": "Booking",
@@ -105,11 +123,30 @@
    "role": "Desk User",
    "share": 0,
    "write": 0
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Company Admin",
+   "share": 0,
+   "write": 1
   }
  ],
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
+ "states": [
+  {"color": "Gray", "title": "Draft"},
+  {"color": "Yellow", "title": "Hold"},
+  {"color": "Blue", "title": "Confirmed"},
+  {"color": "Green", "title": "CheckedIn"},
+  {"color": "Purple", "title": "Completed"},
+  {"color": "Red", "title": "Cancelled"}
+ ],
  "track_changes": 1
 }

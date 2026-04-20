@@ -8,6 +8,13 @@ from frappe.utils import flt
 
 from omnexa_accounting.utils.party import get_or_create_web_guest_customer
 
+_WEB_ORDER_POST_SUBMIT_TRANSITIONS = {
+	"Invoiced": {"Fulfilled", "Cancelled"},
+	"Fulfilled": {"Closed", "Cancelled"},
+	"Closed": set(),
+	"Cancelled": set(),
+}
+
 
 def _default_income_gl(company: str) -> str | None:
 	"""Prefer a leaf **Income** GL for the company; otherwise any non-group GL."""
@@ -29,9 +36,19 @@ def _default_income_gl(company: str) -> str | None:
 
 class WebOrder(Document):
 	def validate(self):
+		self._normalize_legacy_status()
+		self._validate_branch_company()
 		self._validate_idempotency()
 		self._validate_line_companies()
 		self._set_line_amounts()
+		self._validate_submitted_status_transition()
+
+	def before_submit(self):
+		if self.status not in ("Draft", "Pending Payment"):
+			frappe.throw(
+				_("Submit only allowed from Draft or Pending Payment (current: {0}).").format(self.status),
+				title=_("Order-to-cash"),
+			)
 
 	def on_submit(self):
 		if self.sales_invoice:
@@ -39,9 +56,7 @@ class WebOrder(Document):
 		income_acc = _default_income_gl(self.company)
 		if not income_acc:
 			frappe.throw(
-				_("Configure at least one GL Account for company {0} before checkout.").format(
-					self.company
-				),
+				_("Configure at least one GL Account for company {0} before checkout.").format(self.company),
 				title=_("Accounts"),
 			)
 		si = frappe.new_doc("Sales Invoice")
@@ -49,6 +64,8 @@ class WebOrder(Document):
 		si.currency = frappe.db.get_value("Company", self.company, "default_currency")
 		si.customer = get_or_create_web_guest_customer(self.company)
 		si.posting_date = frappe.utils.today()
+		if self.branch and si.meta.has_field("branch"):
+			si.branch = self.branch
 		for row in self.lines or []:
 			ci_name = row.catalog_item
 			slug = frappe.db.get_value("Catalog Item", ci_name, "slug") or ci_name
@@ -65,7 +82,36 @@ class WebOrder(Document):
 		si.insert(ignore_permissions=True)
 		si.submit()
 		self.db_set("sales_invoice", si.name, update_modified=False)
-		frappe.db.set_value(self.doctype, self.name, "status", "Confirmed", update_modified=False)
+		self.db_set("status", "Invoiced", update_modified=False)
+
+	def _normalize_legacy_status(self):
+		if (self.status or "") == "Confirmed":
+			self.status = "Invoiced"
+
+	def _validate_branch_company(self):
+		if not self.branch:
+			return
+		bc = frappe.db.get_value("Branch", self.branch, "company")
+		if bc and self.company and bc != self.company:
+			frappe.throw(_("Branch must belong to the same company."), title=_("Branch"))
+
+	def _validate_submitted_status_transition(self):
+		if self.docstatus != 1 or not self.name:
+			return
+		prev = frappe.db.get_value("Web Order", self.name, "status")
+		if not prev or prev == self.status:
+			return
+		allowed = _WEB_ORDER_POST_SUBMIT_TRANSITIONS.get(prev)
+		if allowed is None:
+			frappe.throw(
+				_("Cannot change status after submit from {0} via this form.").format(prev),
+				title=_("Order-to-cash"),
+			)
+		if self.status not in allowed:
+			frappe.throw(
+				_("Invalid status transition: {0} → {1}.").format(prev, self.status),
+				title=_("Order-to-cash"),
+			)
 
 	def _validate_line_companies(self):
 		for row in self.lines or []:

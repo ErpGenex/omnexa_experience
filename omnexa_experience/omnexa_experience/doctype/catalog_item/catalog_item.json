@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "company",
+  "commerce_segment",
   "slug",
   "title_en",
   "title_ar",
@@ -23,6 +24,14 @@
    "label": "Company",
    "options": "Company",
    "reqd": 1
+  },
+  {
+   "description": "Vertical slice for catalog / storefront analytics.",
+   "fieldname": "commerce_segment",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Commerce segment",
+   "options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
   },
   {
    "fieldname": "slug",

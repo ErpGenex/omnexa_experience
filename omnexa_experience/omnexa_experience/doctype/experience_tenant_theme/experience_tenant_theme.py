@@ -26,6 +26,16 @@ _UI_DENSITY = {"compact", "comfortable", "spacious"}
 _RADIUS_SCALE = {"classic", "soft", "rounded"}
 
 
+def _ensure_omnexa_desk_theme_runtime_on() -> None:
+	"""If site had disabled ERPGenEx desk (Frappe default), turn it back on when a desk theme is applied."""
+	if not cint(frappe.conf.get("disable_omnexa_desk_theme")):
+		return
+	from frappe.installer import update_site_config
+
+	update_site_config("disable_omnexa_desk_theme", 0)
+	frappe.clear_cache()
+
+
 def _hex_to_srgb_channels(hex6: str) -> tuple[float, float, float]:
 	r = int(hex6[1:3], 16) / 255.0
 	g = int(hex6[3:5], 16) / 255.0
@@ -155,6 +165,7 @@ class ExperienceTenantTheme(Document):
 				{"name": self.name or ""},
 			)
 		if cint(getattr(self, "apply_to_desk", 0)):
+			_ensure_omnexa_desk_theme_runtime_on()
 			frappe.db.sql(
 				"""
 				update `tabExperience Tenant Theme`

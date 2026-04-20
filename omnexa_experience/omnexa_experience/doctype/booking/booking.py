@@ -6,6 +6,17 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_datetime, now_datetime
 
+_ACTIVE_OVERLAP_STATUSES = ("Draft", "Hold", "Confirmed", "CheckedIn")
+
+_BOOKING_TRANSITIONS = {
+	"Draft": {"Hold", "Confirmed", "CheckedIn", "Completed", "Cancelled"},
+	"Hold": {"Confirmed", "Draft", "Cancelled"},
+	"Confirmed": {"CheckedIn", "Completed", "Cancelled"},
+	"CheckedIn": {"Completed", "Cancelled"},
+	"Completed": set(),
+	"Cancelled": set(),
+}
+
 
 def _cancel_expired_draft_holds(bookable_resource: str) -> None:
 	"""Auto-cancel draft holds whose TTL has passed (frees slot for overlap checks)."""
@@ -32,14 +43,38 @@ class Booking(Document):
 		res_company = frappe.db.get_value("Bookable Resource", self.bookable_resource, "company")
 		if res_company != self.company:
 			frappe.throw(_("Resource belongs to a different company."), title=_("Validation"))
-		if self.status in ("Draft", "Confirmed"):
+		self._validate_branch_company()
+		self._validate_status_transition()
+		if self.status in _ACTIVE_OVERLAP_STATUSES:
 			_cancel_expired_draft_holds(self.bookable_resource)
 			self._assert_no_overlap()
+
+	def _validate_branch_company(self):
+		if not self.branch:
+			return
+		bc = frappe.db.get_value("Branch", self.branch, "company")
+		if bc and self.company and bc != self.company:
+			frappe.throw(_("Branch must belong to the same company."), title=_("Branch"))
+
+	def _validate_status_transition(self):
+		if not self.name:
+			return
+		prev = frappe.db.get_value("Booking", self.name, "status")
+		if not prev or prev == self.status:
+			return
+		allowed = _BOOKING_TRANSITIONS.get(prev)
+		if allowed is None:
+			return
+		if self.status not in allowed:
+			frappe.throw(
+				_("Invalid booking status transition: {0} → {1}.").format(prev, self.status),
+				title=_("Workflow"),
+			)
 
 	def _assert_no_overlap(self):
 		filters = {
 			"bookable_resource": self.bookable_resource,
-			"status": ["in", ["Draft", "Confirmed"]],
+			"status": ["in", list(_ACTIVE_OVERLAP_STATUSES)],
 		}
 		if self.name:
 			filters["name"] = ["!=", self.name]

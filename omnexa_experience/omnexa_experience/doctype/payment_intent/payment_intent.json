@@ -60,7 +60,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "requires_payment_method\nprocessing\nsucceeded\nfailed",
+   "options": "requires_payment_method\nrequires_confirmation\nprocessing\nsucceeded\ncanceled\nfailed\nrefunded",
    "reqd": 1
   }
  ],
