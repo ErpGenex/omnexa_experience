@@ -20,6 +20,7 @@ class PaymentIntent(Document):
 	def validate(self):
 		if self.web_order and frappe.db.get_value("Web Order", self.web_order, "company") != self.company:
 			frappe.throw(_("Web Order must belong to the same company."), title=_("Validation"))
+		self._validate_lifecycle_controls()
 		self._validate_status_transition()
 
 	def _validate_status_transition(self):
@@ -36,3 +37,9 @@ class PaymentIntent(Document):
 				_("Invalid payment intent status transition: {0} → {1}.").format(prev, self.status),
 				title=_("Payment"),
 			)
+
+	def _validate_lifecycle_controls(self):
+		if self.amount <= 0:
+			frappe.throw(_("Payment Intent amount must be greater than zero."), title=_("Payment"))
+		if self.status in {"processing", "succeeded", "refunded"} and not self.payment_reference:
+			frappe.throw(_("Payment Reference is mandatory for processing/succeeded/refunded states."), title=_("Payment"))

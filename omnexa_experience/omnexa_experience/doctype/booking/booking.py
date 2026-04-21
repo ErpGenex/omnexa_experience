@@ -45,6 +45,7 @@ class Booking(Document):
 			frappe.throw(_("Resource belongs to a different company."), title=_("Validation"))
 		self._validate_branch_company()
 		self._validate_status_transition()
+		self._validate_lifecycle_controls()
 		if self.status in _ACTIVE_OVERLAP_STATUSES:
 			_cancel_expired_draft_holds(self.bookable_resource)
 			self._assert_no_overlap()
@@ -97,3 +98,11 @@ class Booking(Document):
 				frappe.throw(
 					_("Slot overlaps with booking {0}").format(o.name), title=_("Availability")
 				)
+
+	def _validate_lifecycle_controls(self):
+		if self.status in {"Hold", "Confirmed", "CheckedIn", "Completed"} and not self.customer_email:
+			frappe.throw(_("Customer Email is mandatory for active bookings."), title=_("Customer"))
+		if self.status == "Hold" and not self.hold_expires_at:
+			frappe.throw(_("Hold Expires At is mandatory while booking is on hold."), title=_("Hold"))
+		if self.status in {"Confirmed", "CheckedIn", "Completed"} and not self.payment_intent:
+			frappe.throw(_("Payment Intent is mandatory before confirming/checking-in/completing booking."), title=_("Payment"))

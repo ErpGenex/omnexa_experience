@@ -90,7 +90,8 @@ before_request = [
 # Installation
 # ------------
 
-# before_install = "omnexa_experience.install.before_install"
+before_install = "omnexa_experience.install.enforce_supported_frappe_version"
+before_migrate = "omnexa_experience.install.enforce_supported_frappe_version"
 after_install = "omnexa_experience.install.after_install"
 after_migrate = "omnexa_experience.install.after_migrate"
 

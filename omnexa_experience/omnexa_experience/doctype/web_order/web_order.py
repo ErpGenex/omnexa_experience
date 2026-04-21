@@ -41,6 +41,7 @@ class WebOrder(Document):
 		self._validate_idempotency()
 		self._validate_line_companies()
 		self._set_line_amounts()
+		self._validate_lifecycle_controls()
 		self._validate_submitted_status_transition()
 
 	def before_submit(self):
@@ -139,3 +140,11 @@ class WebOrder(Document):
 			row.tax_amount = flt(row.tax_amount)
 			total += flt(row.amount) + flt(row.tax_amount)
 		self.grand_total = total
+
+	def _validate_lifecycle_controls(self):
+		if not self.lines:
+			frappe.throw(_("At least one order line is required."), title=_("Order"))
+		if flt(self.grand_total) <= 0:
+			frappe.throw(_("Grand Total must be greater than zero."), title=_("Order"))
+		if self.status in {"Pending Payment", "Invoiced", "Fulfilled", "Closed"} and not self.customer_email:
+			frappe.throw(_("Customer Email is mandatory once order enters payment/fulfillment lifecycle."), title=_("Customer"))
