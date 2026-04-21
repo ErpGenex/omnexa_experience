@@ -1,251 +1,254 @@
 {
- "actions": [],
- "autoname": "hash",
- "creation": "2026-04-13 00:00:00",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "identity_section",
-  "company",
-  "theme_preset",
-  "apply_to_public_site",
-  "apply_to_desk",
-  "section_colors",
-  "primary_color",
-  "primary_contrast",
-  "background_color",
-  "surface_color",
-  "foreground_color",
-  "section_typography",
-  "font_stack_for_web",
-  "desk_theme_mode",
-  "desk_base_font_size",
-  "desk_ui_density",
-  "desk_radius_scale",
-  "section_brand_assets",
-  "logo",
-  "logo_url",
-  "favicon",
-  "favicon_url",
-  "section_publish",
-  "published_at",
-  "published_by",
-  "publish_note",
-  "governance_section",
-  "change_ticket",
-  "control_section",
-  "owner_user"
- ],
- "fields": [
-  {
-   "fieldname": "identity_section",
-   "fieldtype": "Section Break",
-   "label": "Identity"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Company",
-   "options": "Company",
-   "reqd": 1
-  },
-  {
-   "default": "erpgenex_theme_0426",
-   "fieldname": "theme_preset",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Theme preset",
-   "options": "erpgenex_theme_0426\nglobal_minimal_light\nglobal_midnight_blue"
-  },
-  {
-   "default": "0",
-   "description": "When enabled, this row becomes the only active public-web token override for the site (others are cleared).",
-   "fieldname": "apply_to_public_site",
-   "fieldtype": "Check",
-   "label": "Apply to public website"
-  },
-  {
-   "default": "1",
-   "description": "When enabled, this row becomes the active Desk / ERP theme for users of the same company.",
-   "fieldname": "apply_to_desk",
-   "fieldtype": "Check",
-   "label": "Apply to Desk / ERP"
-  },
-  {
-   "fieldname": "section_colors",
-   "fieldtype": "Section Break",
-   "label": "Colors (CSS tokens)"
-  },
-  {
-   "description": "Maps to --ox-primary. Format #RRGGBB.",
-   "fieldname": "primary_color",
-   "fieldtype": "Data",
-   "label": "Primary"
-  },
-  {
-   "description": "Maps to --ox-primary-contrast.",
-   "fieldname": "primary_contrast",
-   "fieldtype": "Data",
-   "label": "Primary contrast"
-  },
-  {
-   "description": "Maps to --ox-bg.",
-   "fieldname": "background_color",
-   "fieldtype": "Data",
-   "label": "Background"
-  },
-  {
-   "description": "Maps to --ox-surface.",
-   "fieldname": "surface_color",
-   "fieldtype": "Data",
-   "label": "Surface"
-  },
-  {
-   "description": "Maps to --ox-fg.",
-   "fieldname": "foreground_color",
-   "fieldtype": "Data",
-   "label": "Foreground"
-  },
-  {
-   "fieldname": "section_typography",
-   "fieldtype": "Section Break",
-   "label": "Typography"
-  },
-  {
-   "description": "Maps to --ox-font-sans. Safe subset only (letters, numbers, commas, spaces, hyphens, quotes). Max 200 chars.",
-   "fieldname": "font_stack_for_web",
-   "fieldtype": "Data",
-   "label": "Font stack (sans)"
-  },
-  {
-   "default": "auto",
-   "fieldname": "desk_theme_mode",
-   "fieldtype": "Select",
-   "label": "Desk theme mode",
-   "options": "auto\nlight\ndark"
-  },
-  {
-   "default": "16px",
-   "fieldname": "desk_base_font_size",
-   "fieldtype": "Select",
-   "label": "Desk base font size",
-   "options": "14px\n15px\n16px\n17px\n18px"
-  },
-  {
-   "default": "comfortable",
-   "fieldname": "desk_ui_density",
-   "fieldtype": "Select",
-   "label": "Desk UI density",
-   "options": "compact\ncomfortable\nspacious"
-  },
-  {
-   "default": "soft",
-   "fieldname": "desk_radius_scale",
-   "fieldtype": "Select",
-   "label": "Desk radius style",
-   "options": "classic\nsoft\nrounded"
-  },
-  {
-   "fieldname": "section_brand_assets",
-   "fieldtype": "Section Break",
-   "label": "Brand assets"
-  },
-  {
-   "description": "Attach Image preferred for tenant-managed assets (stored under /files).",
-   "fieldname": "logo",
-   "fieldtype": "Attach Image",
-   "label": "Logo"
-  },
-  {
-   "description": "Fallback: http(s) image URL; exposed as CSS --ox-logo-url and og:image. Max 2048 chars; no quotes or angle brackets.",
-   "fieldname": "logo_url",
-   "fieldtype": "Data",
-   "label": "Logo URL"
-  },
-  {
-   "description": "Attach preferred for tenant-managed icon (stored under /files).",
-   "fieldname": "favicon",
-   "fieldtype": "Attach",
-   "label": "Favicon"
-  },
-  {
-   "description": "Fallback: http(s) icon URL; injected as <link rel=\"icon\">. Same safety rules as logo.",
-   "fieldname": "favicon_url",
-   "fieldtype": "Data",
-   "label": "Favicon URL"
-  },
-  {
-   "fieldname": "section_publish",
-   "fieldtype": "Section Break",
-   "label": "Publish metadata"
-  },
-  {
-   "fieldname": "published_at",
-   "fieldtype": "Datetime",
-   "label": "Published At",
-   "read_only": 1
-  },
-  {
-   "fieldname": "published_by",
-   "fieldtype": "Data",
-   "label": "Published By",
-   "read_only": 1
-  },
-  {
-   "fieldname": "publish_note",
-   "fieldtype": "Small Text",
-   "label": "Publish Note",
-   "read_only": 1
-  },
-  {
-   "fieldname": "governance_section",
-   "fieldtype": "Section Break",
-   "label": "Governance"
-  },
-  {
-   "fieldname": "change_ticket",
-   "fieldtype": "Data",
-   "label": "Change Ticket"
-  },
-  {
-   "fieldname": "control_section",
-   "fieldtype": "Section Break",
-   "label": "Control"
-  },
-  {
-   "fieldname": "owner_user",
-   "fieldtype": "Link",
-   "label": "Owner",
-   "options": "User"
-  }
- ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 0,
- "links": [],
- "modified": "2026-04-15 00:00:00",
- "modified_by": "Administrator",
- "module": "Omnexa Experience",
- "name": "Experience Tenant Theme",
- "naming_rule": "Random",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+	"actions": [],
+	"autoname": "hash",
+	"creation": "2026-04-13 00:00:00",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"company",
+		"theme_preset",
+		"column_break_omnexa_3",
+		"apply_to_public_site",
+		"apply_to_desk",
+		"section_colors",
+		"primary_color",
+		"primary_contrast",
+		"column_break_omnexa_1",
+		"background_color",
+		"surface_color",
+		"foreground_color",
+		"section_typography",
+		"font_stack_for_web",
+		"desk_theme_mode",
+		"column_break_omnexa_2",
+		"desk_base_font_size",
+		"desk_ui_density",
+		"desk_radius_scale",
+		"section_brand_assets",
+		"logo",
+		"logo_url",
+		"favicon",
+		"favicon_url",
+		"section_publish",
+		"published_at",
+		"published_by",
+		"publish_note",
+		"governance_section",
+		"change_ticket",
+		"owner_user"
+	],
+	"fields": [
+		{
+			"fieldname": "company",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Company",
+			"options": "Company",
+			"reqd": 1
+		},
+		{
+			"default": "erpgenex_theme_0426",
+			"fieldname": "theme_preset",
+			"fieldtype": "Select",
+			"in_list_view": 1,
+			"label": "Theme preset",
+			"options": "erpgenex_theme_0426\nglobal_minimal_light\nglobal_midnight_blue"
+		},
+		{
+			"default": "0",
+			"description": "When enabled, this row becomes the only active public-web token override for the site (others are cleared).",
+			"fieldname": "apply_to_public_site",
+			"fieldtype": "Check",
+			"label": "Apply to public website"
+		},
+		{
+			"default": "1",
+			"description": "When enabled, this row becomes the active Desk / ERP theme for users of the same company.",
+			"fieldname": "apply_to_desk",
+			"fieldtype": "Check",
+			"label": "Apply to Desk / ERP"
+		},
+		{
+			"fieldname": "section_colors",
+			"fieldtype": "Section Break",
+			"label": "Colors (CSS tokens)"
+		},
+		{
+			"description": "Maps to --ox-primary. Format #RRGGBB.",
+			"fieldname": "primary_color",
+			"fieldtype": "Data",
+			"label": "Primary"
+		},
+		{
+			"description": "Maps to --ox-primary-contrast.",
+			"fieldname": "primary_contrast",
+			"fieldtype": "Data",
+			"label": "Primary contrast"
+		},
+		{
+			"description": "Maps to --ox-bg.",
+			"fieldname": "background_color",
+			"fieldtype": "Data",
+			"label": "Background"
+		},
+		{
+			"description": "Maps to --ox-surface.",
+			"fieldname": "surface_color",
+			"fieldtype": "Data",
+			"label": "Surface"
+		},
+		{
+			"description": "Maps to --ox-fg.",
+			"fieldname": "foreground_color",
+			"fieldtype": "Data",
+			"label": "Foreground"
+		},
+		{
+			"fieldname": "section_typography",
+			"fieldtype": "Section Break",
+			"label": "Typography"
+		},
+		{
+			"description": "Maps to --ox-font-sans. Safe subset only (letters, numbers, commas, spaces, hyphens, quotes). Max 200 chars.",
+			"fieldname": "font_stack_for_web",
+			"fieldtype": "Data",
+			"label": "Font stack (sans)"
+		},
+		{
+			"default": "auto",
+			"fieldname": "desk_theme_mode",
+			"fieldtype": "Select",
+			"label": "Desk theme mode",
+			"options": "auto\nlight\ndark"
+		},
+		{
+			"default": "16px",
+			"fieldname": "desk_base_font_size",
+			"fieldtype": "Select",
+			"label": "Desk base font size",
+			"options": "14px\n15px\n16px\n17px\n18px"
+		},
+		{
+			"default": "comfortable",
+			"fieldname": "desk_ui_density",
+			"fieldtype": "Select",
+			"label": "Desk UI density",
+			"options": "compact\ncomfortable\nspacious"
+		},
+		{
+			"default": "soft",
+			"fieldname": "desk_radius_scale",
+			"fieldtype": "Select",
+			"label": "Desk radius style",
+			"options": "classic\nsoft\nrounded"
+		},
+		{
+			"fieldname": "section_brand_assets",
+			"fieldtype": "Section Break",
+			"label": "Brand assets"
+		},
+		{
+			"description": "Attach Image preferred for tenant-managed assets (stored under /files).",
+			"fieldname": "logo",
+			"fieldtype": "Attach Image",
+			"label": "Logo"
+		},
+		{
+			"description": "Fallback: http(s) image URL; exposed as CSS --ox-logo-url and og:image. Max 2048 chars; no quotes or angle brackets.",
+			"fieldname": "logo_url",
+			"fieldtype": "Data",
+			"label": "Logo URL"
+		},
+		{
+			"description": "Attach preferred for tenant-managed icon (stored under /files).",
+			"fieldname": "favicon",
+			"fieldtype": "Attach",
+			"label": "Favicon"
+		},
+		{
+			"description": "Fallback: http(s) icon URL; injected as <link rel=\"icon\">. Same safety rules as logo.",
+			"fieldname": "favicon_url",
+			"fieldtype": "Data",
+			"label": "Favicon URL"
+		},
+		{
+			"fieldname": "section_publish",
+			"fieldtype": "Section Break",
+			"label": "Publish metadata"
+		},
+		{
+			"fieldname": "published_at",
+			"fieldtype": "Datetime",
+			"label": "Published At",
+			"read_only": 1
+		},
+		{
+			"fieldname": "published_by",
+			"fieldtype": "Data",
+			"label": "Published By",
+			"read_only": 1
+		},
+		{
+			"fieldname": "publish_note",
+			"fieldtype": "Small Text",
+			"label": "Publish Note",
+			"read_only": 1
+		},
+		{
+			"fieldname": "governance_section",
+			"fieldtype": "Section Break",
+			"label": "Governance"
+		},
+		{
+			"fieldname": "change_ticket",
+			"fieldtype": "Data",
+			"label": "Change Ticket"
+		},
+		{
+			"fieldname": "owner_user",
+			"fieldtype": "Link",
+			"label": "Owner",
+			"options": "User"
+		},
+		{
+			"fieldname": "column_break_omnexa_1",
+			"fieldtype": "Column Break"
+		},
+		{
+			"fieldname": "column_break_omnexa_2",
+			"fieldtype": "Column Break"
+		},
+		{
+			"fieldname": "column_break_omnexa_3",
+			"fieldtype": "Column Break"
+		}
+	],
+	"grid_page_length": 50,
+	"index_web_pages_for_search": 0,
+	"links": [],
+	"modified": "2026-04-15 00:00:00",
+	"modified_by": "Administrator",
+	"module": "Omnexa Experience",
+	"name": "Experience Tenant Theme",
+	"naming_rule": "Random",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		}
+	],
+	"row_format": "Dynamic",
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [],
+	"track_changes": 1
 }

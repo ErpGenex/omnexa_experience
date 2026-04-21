@@ -1,158 +1,156 @@
 {
- "actions": [],
- "allow_rename": 1,
- "autoname": "hash",
- "creation": "2026-04-13 00:00:00",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "identity_section",
-  "company",
-  "commerce_segment",
-  "slug",
-  "title_en",
-  "title_ar",
-  "classification_section",
-  "item_type",
-  "internal_item_code",
-  "eta_item_code",
-  "control_section",
-  "classification_code",
-  "published"
- ],
- "fields": [
-  {
-   "fieldname": "identity_section",
-   "fieldtype": "Section Break",
-   "label": "Catalog Identity"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Company",
-   "options": "Company",
-   "reqd": 1
-  },
-  {
-   "description": "Vertical slice for catalog / storefront analytics.",
-   "fieldname": "commerce_segment",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Commerce segment",
-   "options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
-  },
-  {
-   "fieldname": "slug",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Slug",
-   "reqd": 1
-  },
-  {
-   "fieldname": "title_en",
-   "fieldtype": "Data",
-   "label": "Title (EN)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "title_ar",
-   "fieldtype": "Data",
-   "label": "Title (AR)"
-  },
-  {
-   "fieldname": "classification_section",
-   "fieldtype": "Section Break",
-   "label": "Type and Mapping"
-  },
-  {
-   "default": "product",
-   "fieldname": "item_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Item Type",
-   "options": "product\nservice\nbookable_service",
-   "reqd": 1
-  },
-  {
-   "description": "Future link to omnexa_trading Item — text stub until Item exists",
-   "fieldname": "internal_item_code",
-   "fieldtype": "Data",
-   "label": "Internal Item Code"
-  },
-  {
-   "fieldname": "eta_item_code",
-   "fieldtype": "Data",
-   "label": "ETA / EGS Item Code"
-  },
-  {
-   "fieldname": "control_section",
-   "fieldtype": "Section Break",
-   "label": "Control"
-  },
-  {
-   "fieldname": "classification_code",
-   "fieldtype": "Data",
-   "label": "Classification Code"
-  },
-  {
-   "default": "0",
-   "fieldname": "published",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Published"
-  }
- ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-04-13 00:00:00",
- "modified_by": "Administrator",
- "module": "Omnexa Experience",
- "name": "Catalog Item",
- "naming_rule": "Random",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 0,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Website Manager",
-   "share": 0,
-   "write": 1
-  },
-  {
-   "create": 0,
-   "delete": 0,
-   "email": 0,
-   "export": 0,
-   "print": 0,
-   "read": 1,
-   "report": 1,
-   "role": "Desk User",
-   "share": 0,
-   "write": 0
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+	"actions": [],
+	"allow_rename": 1,
+	"autoname": "hash",
+	"creation": "2026-04-13 00:00:00",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"company",
+		"commerce_segment",
+		"column_break_omnexa_1",
+		"slug",
+		"title_en",
+		"title_ar",
+		"classification_section",
+		"item_type",
+		"internal_item_code",
+		"column_break_omnexa_2",
+		"eta_item_code",
+		"classification_code",
+		"published"
+	],
+	"fields": [
+		{
+			"fieldname": "company",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Company",
+			"options": "Company",
+			"reqd": 1
+		},
+		{
+			"description": "Vertical slice for catalog / storefront analytics.",
+			"fieldname": "commerce_segment",
+			"fieldtype": "Select",
+			"in_list_view": 1,
+			"label": "Commerce segment",
+			"options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
+		},
+		{
+			"fieldname": "slug",
+			"fieldtype": "Data",
+			"in_list_view": 1,
+			"label": "Slug",
+			"reqd": 1
+		},
+		{
+			"fieldname": "title_en",
+			"fieldtype": "Data",
+			"label": "Title (EN)",
+			"reqd": 1
+		},
+		{
+			"fieldname": "title_ar",
+			"fieldtype": "Data",
+			"label": "Title (AR)"
+		},
+		{
+			"fieldname": "classification_section",
+			"fieldtype": "Section Break",
+			"label": "Type and Mapping"
+		},
+		{
+			"default": "product",
+			"fieldname": "item_type",
+			"fieldtype": "Select",
+			"in_list_view": 1,
+			"label": "Item Type",
+			"options": "product\nservice\nbookable_service",
+			"reqd": 1
+		},
+		{
+			"description": "Future link to omnexa_trading Item — text stub until Item exists",
+			"fieldname": "internal_item_code",
+			"fieldtype": "Data",
+			"label": "Internal Item Code"
+		},
+		{
+			"fieldname": "eta_item_code",
+			"fieldtype": "Data",
+			"label": "ETA / EGS Item Code"
+		},
+		{
+			"fieldname": "classification_code",
+			"fieldtype": "Data",
+			"label": "Classification Code"
+		},
+		{
+			"default": "0",
+			"fieldname": "published",
+			"fieldtype": "Check",
+			"in_list_view": 1,
+			"label": "Published"
+		},
+		{
+			"fieldname": "column_break_omnexa_1",
+			"fieldtype": "Column Break"
+		},
+		{
+			"fieldname": "column_break_omnexa_2",
+			"fieldtype": "Column Break"
+		}
+	],
+	"grid_page_length": 50,
+	"index_web_pages_for_search": 1,
+	"links": [],
+	"modified": "2026-04-13 00:00:00",
+	"modified_by": "Administrator",
+	"module": "Omnexa Experience",
+	"name": "Catalog Item",
+	"naming_rule": "Random",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		},
+		{
+			"create": 1,
+			"delete": 0,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "Website Manager",
+			"share": 0,
+			"write": 1
+		},
+		{
+			"create": 0,
+			"delete": 0,
+			"email": 0,
+			"export": 0,
+			"print": 0,
+			"read": 1,
+			"report": 1,
+			"role": "Desk User",
+			"share": 0,
+			"write": 0
+		}
+	],
+	"row_format": "Dynamic",
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [],
+	"track_changes": 1
 }

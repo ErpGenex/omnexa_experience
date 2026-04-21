@@ -1,117 +1,105 @@
 {
- "actions": [],
- "autoname": "hash",
- "creation": "2026-04-13 00:00:00",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "identity_section",
-  "company",
-  "resource_name",
-  "scheduling_section",
-  "slot_duration_minutes",
-  "buffer_minutes",
-  "timezone",
-  "control_section",
-  "resource_owner"
- ],
- "fields": [
-  {
-   "fieldname": "identity_section",
-   "fieldtype": "Section Break",
-   "label": "Resource Identity"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Company",
-   "options": "Company",
-   "reqd": 1
-  },
-  {
-   "fieldname": "resource_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Resource Name",
-   "reqd": 1
-  },
-  {
-   "fieldname": "scheduling_section",
-   "fieldtype": "Section Break",
-   "label": "Scheduling"
-  },
-  {
-   "default": "30",
-   "fieldname": "slot_duration_minutes",
-   "fieldtype": "Int",
-   "label": "Slot Duration (minutes)",
-   "non_negative": 1,
-   "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "buffer_minutes",
-   "fieldtype": "Int",
-   "label": "Buffer (minutes)",
-   "non_negative": 1
-  },
-  {
-   "default": "Africa/Cairo",
-   "fieldname": "timezone",
-   "fieldtype": "Data",
-   "label": "Timezone"
-  },
-  {
-   "fieldname": "control_section",
-   "fieldtype": "Section Break",
-   "label": "Control"
-  },
-  {
-   "fieldname": "resource_owner",
-   "fieldtype": "Link",
-   "label": "Resource Owner",
-   "options": "User"
-  }
- ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-04-13 00:00:00",
- "modified_by": "Administrator",
- "module": "Omnexa Experience",
- "name": "Bookable Resource",
- "naming_rule": "Random",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 0,
-   "delete": 0,
-   "email": 0,
-   "export": 0,
-   "print": 0,
-   "read": 1,
-   "report": 1,
-   "role": "Desk User",
-   "share": 0,
-   "write": 0
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+	"actions": [],
+	"autoname": "hash",
+	"creation": "2026-04-13 00:00:00",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"company",
+		"resource_name",
+		"scheduling_section",
+		"slot_duration_minutes",
+		"buffer_minutes",
+		"timezone",
+		"resource_owner"
+	],
+	"fields": [
+		{
+			"fieldname": "company",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Company",
+			"options": "Company",
+			"reqd": 1
+		},
+		{
+			"fieldname": "resource_name",
+			"fieldtype": "Data",
+			"in_list_view": 1,
+			"label": "Resource Name",
+			"reqd": 1
+		},
+		{
+			"fieldname": "scheduling_section",
+			"fieldtype": "Section Break",
+			"label": "Scheduling"
+		},
+		{
+			"default": "30",
+			"fieldname": "slot_duration_minutes",
+			"fieldtype": "Int",
+			"label": "Slot Duration (minutes)",
+			"non_negative": 1,
+			"reqd": 1
+		},
+		{
+			"default": "0",
+			"fieldname": "buffer_minutes",
+			"fieldtype": "Int",
+			"label": "Buffer (minutes)",
+			"non_negative": 1
+		},
+		{
+			"default": "Africa/Cairo",
+			"fieldname": "timezone",
+			"fieldtype": "Data",
+			"label": "Timezone"
+		},
+		{
+			"fieldname": "resource_owner",
+			"fieldtype": "Link",
+			"label": "Resource Owner",
+			"options": "User"
+		}
+	],
+	"grid_page_length": 50,
+	"index_web_pages_for_search": 1,
+	"links": [],
+	"modified": "2026-04-13 00:00:00",
+	"modified_by": "Administrator",
+	"module": "Omnexa Experience",
+	"name": "Bookable Resource",
+	"naming_rule": "Random",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		},
+		{
+			"create": 0,
+			"delete": 0,
+			"email": 0,
+			"export": 0,
+			"print": 0,
+			"read": 1,
+			"report": 1,
+			"role": "Desk User",
+			"share": 0,
+			"write": 0
+		}
+	],
+	"row_format": "Dynamic",
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [],
+	"track_changes": 1
 }

@@ -1,143 +1,136 @@
 {
- "actions": [],
- "autoname": "hash",
- "creation": "2026-04-13 00:00:00",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "identity_section",
-  "company",
-  "web_order",
-  "sales_invoice",
-  "amount_section",
-  "amount",
-  "currency",
-  "gateway_section",
-  "client_secret_ref",
-  "status",
-  "payment_reference",
-  "control_section",
-  "external_reference"
- ],
- "fields": [
-  {
-   "fieldname": "identity_section",
-   "fieldtype": "Section Break",
-   "label": "Payment Identity"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Company",
-   "options": "Company",
-   "reqd": 1
-  },
-  {
-   "fieldname": "web_order",
-   "fieldtype": "Link",
-   "label": "Web Order",
-   "options": "Web Order"
-  },
-  {
-   "fieldname": "sales_invoice",
-   "fieldtype": "Link",
-   "label": "Sales Invoice",
-   "options": "Sales Invoice"
-  },
-  {
-   "fieldname": "amount_section",
-   "fieldtype": "Section Break",
-   "label": "Amount"
-  },
-  {
-   "fieldname": "amount",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Amount",
-   "reqd": 1
-  },
-  {
-   "default": "EGP",
-   "fieldname": "currency",
-   "fieldtype": "Data",
-   "label": "Currency",
-   "reqd": 1
-  },
-  {
-   "fieldname": "gateway_section",
-   "fieldtype": "Section Break",
-   "label": "Gateway"
-  },
-  {
-   "fieldname": "client_secret_ref",
-   "fieldtype": "Small Text",
-   "label": "Client Secret Token Ref",
-   "read_only": 1
-  },
-  {
-   "default": "requires_payment_method",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "requires_payment_method\nrequires_confirmation\nprocessing\nsucceeded\ncanceled\nfailed\nrefunded",
-   "reqd": 1
-  },
-  {
-   "fieldname": "payment_reference",
-   "fieldtype": "Data",
-   "label": "Payment Reference"
-  },
-  {
-   "fieldname": "control_section",
-   "fieldtype": "Section Break",
-   "label": "Control"
-  },
-  {
-   "fieldname": "external_reference",
-   "fieldtype": "Data",
-   "label": "External Reference"
-  }
- ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-04-13 00:00:00",
- "modified_by": "Administrator",
- "module": "Omnexa Experience",
- "name": "Payment Intent",
- "naming_rule": "Random",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 0,
-   "delete": 0,
-   "email": 0,
-   "export": 0,
-   "print": 0,
-   "read": 1,
-   "report": 1,
-   "role": "Desk User",
-   "share": 0,
-   "write": 0
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+	"actions": [],
+	"autoname": "hash",
+	"creation": "2026-04-13 00:00:00",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"company",
+		"web_order",
+		"sales_invoice",
+		"amount_section",
+		"amount",
+		"currency",
+		"gateway_section",
+		"client_secret_ref",
+		"status",
+		"column_break_omnexa_1",
+		"payment_reference",
+		"external_reference"
+	],
+	"fields": [
+		{
+			"fieldname": "company",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Company",
+			"options": "Company",
+			"reqd": 1
+		},
+		{
+			"fieldname": "web_order",
+			"fieldtype": "Link",
+			"label": "Web Order",
+			"options": "Web Order"
+		},
+		{
+			"fieldname": "sales_invoice",
+			"fieldtype": "Link",
+			"label": "Sales Invoice",
+			"options": "Sales Invoice"
+		},
+		{
+			"fieldname": "amount_section",
+			"fieldtype": "Section Break",
+			"label": "Amount"
+		},
+		{
+			"fieldname": "amount",
+			"fieldtype": "Currency",
+			"in_list_view": 1,
+			"label": "Amount",
+			"reqd": 1
+		},
+		{
+			"default": "EGP",
+			"fieldname": "currency",
+			"fieldtype": "Data",
+			"label": "Currency",
+			"reqd": 1
+		},
+		{
+			"fieldname": "gateway_section",
+			"fieldtype": "Section Break",
+			"label": "Gateway"
+		},
+		{
+			"fieldname": "client_secret_ref",
+			"fieldtype": "Small Text",
+			"label": "Client Secret Token Ref",
+			"read_only": 1
+		},
+		{
+			"default": "requires_payment_method",
+			"fieldname": "status",
+			"fieldtype": "Select",
+			"in_list_view": 1,
+			"label": "Status",
+			"options": "requires_payment_method\nrequires_confirmation\nprocessing\nsucceeded\ncanceled\nfailed\nrefunded",
+			"reqd": 1
+		},
+		{
+			"fieldname": "payment_reference",
+			"fieldtype": "Data",
+			"label": "Payment Reference"
+		},
+		{
+			"fieldname": "external_reference",
+			"fieldtype": "Data",
+			"label": "External Reference"
+		},
+		{
+			"fieldname": "column_break_omnexa_1",
+			"fieldtype": "Column Break"
+		}
+	],
+	"grid_page_length": 50,
+	"index_web_pages_for_search": 1,
+	"links": [],
+	"modified": "2026-04-13 00:00:00",
+	"modified_by": "Administrator",
+	"module": "Omnexa Experience",
+	"name": "Payment Intent",
+	"naming_rule": "Random",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		},
+		{
+			"create": 0,
+			"delete": 0,
+			"email": 0,
+			"export": 0,
+			"print": 0,
+			"read": 1,
+			"report": 1,
+			"role": "Desk User",
+			"share": 0,
+			"write": 0
+		}
+	],
+	"row_format": "Dynamic",
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [],
+	"track_changes": 1
 }

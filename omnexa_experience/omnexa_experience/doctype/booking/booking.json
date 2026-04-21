@@ -1,206 +1,199 @@
 {
- "actions": [],
- "autoname": "hash",
- "creation": "2026-04-13 00:00:00",
- "description": "Resource booking lifecycle with explicit states for operations and customer journey (service delivery / SLA).",
- "doctype": "DocType",
- "engine": "InnoDB",
- "field_order": [
-  "identity_section",
-  "company",
-  "branch",
-  "commerce_segment",
-  "schedule_section",
-  "bookable_resource",
-  "start_datetime",
-  "end_datetime",
-  "customer_section",
-  "customer_email",
-  "payment_intent",
-  "status",
-  "hold_expires_at",
-  "booking_reference",
-  "control_section",
-  "external_reference"
- ],
- "fields": [
-  {
-   "fieldname": "identity_section",
-   "fieldtype": "Section Break",
-   "label": "Booking Identity"
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Company",
-   "options": "Company",
-   "reqd": 1
-  },
-  {
-   "fieldname": "branch",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Branch",
-   "options": "Branch"
-  },
-  {
-   "description": "Vertical slice for analytics (aligns with Company industry / operating model).",
-   "fieldname": "commerce_segment",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Commerce segment",
-   "options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
-  },
-  {
-   "fieldname": "schedule_section",
-   "fieldtype": "Section Break",
-   "label": "Schedule"
-  },
-  {
-   "fieldname": "bookable_resource",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Bookable Resource",
-   "options": "Bookable Resource",
-   "reqd": 1
-  },
-  {
-   "fieldname": "start_datetime",
-   "fieldtype": "Datetime",
-   "in_list_view": 1,
-   "label": "Start",
-   "reqd": 1
-  },
-  {
-   "fieldname": "end_datetime",
-   "fieldtype": "Datetime",
-   "in_list_view": 1,
-   "label": "End",
-   "reqd": 1
-  },
-  {
-   "fieldname": "customer_section",
-   "fieldtype": "Section Break",
-   "label": "Customer and Payment"
-  },
-  {
-   "fieldname": "customer_email",
-   "fieldtype": "Data",
-   "label": "Customer Email"
-  },
-  {
-   "fieldname": "payment_intent",
-   "fieldtype": "Link",
-   "label": "Payment Intent",
-   "options": "Payment Intent"
-  },
-  {
-   "default": "Draft",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "Draft\nHold\nConfirmed\nCheckedIn\nCompleted\nCancelled",
-   "reqd": 1
-  },
-  {
-   "description": "Guest hold TTL end; null for non-hold bookings. Expired holds are auto-cancelled before overlap checks.",
-   "fieldname": "hold_expires_at",
-   "fieldtype": "Datetime",
-   "label": "Hold Expires At"
-  },
-  {
-   "fieldname": "booking_reference",
-   "fieldtype": "Data",
-   "label": "Booking Reference"
-  },
-  {
-   "fieldname": "control_section",
-   "fieldtype": "Section Break",
-   "label": "Control"
-  },
-  {
-   "fieldname": "external_reference",
-   "fieldtype": "Data",
-   "label": "External Reference"
-  }
- ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-04-19 23:00:00",
- "modified_by": "Administrator",
- "module": "Omnexa Experience",
- "name": "Booking",
- "naming_rule": "Random",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 0,
-   "delete": 0,
-   "email": 0,
-   "export": 0,
-   "print": 0,
-   "read": 1,
-   "report": 1,
-   "role": "Desk User",
-   "share": 0,
-   "write": 0
-  },
-  {
-   "create": 1,
-   "delete": 0,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Company Admin",
-   "share": 0,
-   "write": 1
-  }
- ],
- "row_format": "Dynamic",
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": [
-  {
-   "color": "Gray",
-   "title": "Draft"
-  },
-  {
-   "color": "Yellow",
-   "title": "Hold"
-  },
-  {
-   "color": "Blue",
-   "title": "Confirmed"
-  },
-  {
-   "color": "Green",
-   "title": "CheckedIn"
-  },
-  {
-   "color": "Purple",
-   "title": "Completed"
-  },
-  {
-   "color": "Red",
-   "title": "Cancelled"
-  }
- ],
- "track_changes": 1
+	"actions": [],
+	"autoname": "hash",
+	"creation": "2026-04-13 00:00:00",
+	"description": "Resource booking lifecycle with explicit states for operations and customer journey (service delivery / SLA).",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"company",
+		"branch",
+		"commerce_segment",
+		"schedule_section",
+		"bookable_resource",
+		"start_datetime",
+		"end_datetime",
+		"customer_section",
+		"customer_email",
+		"payment_intent",
+		"status",
+		"column_break_omnexa_1",
+		"hold_expires_at",
+		"booking_reference",
+		"external_reference"
+	],
+	"fields": [
+		{
+			"fieldname": "company",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Company",
+			"options": "Company",
+			"reqd": 1
+		},
+		{
+			"fieldname": "branch",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Branch",
+			"options": "Branch"
+		},
+		{
+			"description": "Vertical slice for analytics (aligns with Company industry / operating model).",
+			"fieldname": "commerce_segment",
+			"fieldtype": "Select",
+			"in_list_view": 1,
+			"label": "Commerce segment",
+			"options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
+		},
+		{
+			"fieldname": "schedule_section",
+			"fieldtype": "Section Break",
+			"label": "Schedule"
+		},
+		{
+			"fieldname": "bookable_resource",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Bookable Resource",
+			"options": "Bookable Resource",
+			"reqd": 1
+		},
+		{
+			"fieldname": "start_datetime",
+			"fieldtype": "Datetime",
+			"in_list_view": 1,
+			"label": "Start",
+			"reqd": 1
+		},
+		{
+			"fieldname": "end_datetime",
+			"fieldtype": "Datetime",
+			"in_list_view": 1,
+			"label": "End",
+			"reqd": 1
+		},
+		{
+			"fieldname": "customer_section",
+			"fieldtype": "Section Break",
+			"label": "Customer and Payment"
+		},
+		{
+			"fieldname": "customer_email",
+			"fieldtype": "Data",
+			"label": "Customer Email"
+		},
+		{
+			"fieldname": "payment_intent",
+			"fieldtype": "Link",
+			"label": "Payment Intent",
+			"options": "Payment Intent"
+		},
+		{
+			"default": "Draft",
+			"fieldname": "status",
+			"fieldtype": "Select",
+			"in_list_view": 1,
+			"label": "Status",
+			"options": "Draft\nHold\nConfirmed\nCheckedIn\nCompleted\nCancelled",
+			"reqd": 1
+		},
+		{
+			"description": "Guest hold TTL end; null for non-hold bookings. Expired holds are auto-cancelled before overlap checks.",
+			"fieldname": "hold_expires_at",
+			"fieldtype": "Datetime",
+			"label": "Hold Expires At"
+		},
+		{
+			"fieldname": "booking_reference",
+			"fieldtype": "Data",
+			"label": "Booking Reference"
+		},
+		{
+			"fieldname": "external_reference",
+			"fieldtype": "Data",
+			"label": "External Reference"
+		},
+		{
+			"fieldname": "column_break_omnexa_1",
+			"fieldtype": "Column Break"
+		}
+	],
+	"grid_page_length": 50,
+	"index_web_pages_for_search": 1,
+	"links": [],
+	"modified": "2026-04-19 23:00:00",
+	"modified_by": "Administrator",
+	"module": "Omnexa Experience",
+	"name": "Booking",
+	"naming_rule": "Random",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		},
+		{
+			"create": 0,
+			"delete": 0,
+			"email": 0,
+			"export": 0,
+			"print": 0,
+			"read": 1,
+			"report": 1,
+			"role": "Desk User",
+			"share": 0,
+			"write": 0
+		},
+		{
+			"create": 1,
+			"delete": 0,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "Company Admin",
+			"share": 0,
+			"write": 1
+		}
+	],
+	"row_format": "Dynamic",
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [
+		{
+			"color": "Gray",
+			"title": "Draft"
+		},
+		{
+			"color": "Yellow",
+			"title": "Hold"
+		},
+		{
+			"color": "Blue",
+			"title": "Confirmed"
+		},
+		{
+			"color": "Green",
+			"title": "CheckedIn"
+		},
+		{
+			"color": "Purple",
+			"title": "Completed"
+		},
+		{
+			"color": "Red",
+			"title": "Cancelled"
+		}
+	],
+	"track_changes": 1
 }
