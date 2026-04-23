@@ -1,8 +1,8 @@
 app_name = "omnexa_experience"
 app_title = "ErpGenEx — Experience"
-app_publisher = "Omnexa"
+app_publisher = "ErpGenEx"
 app_description = "Public web, catalog, checkout, and booking for ErpGenEx (omnexa_experience)"
-app_email = "dev@omnexa.local"
+app_email = "dev@erpgenex.com"
 app_license = "mit"
 
 # Apps
