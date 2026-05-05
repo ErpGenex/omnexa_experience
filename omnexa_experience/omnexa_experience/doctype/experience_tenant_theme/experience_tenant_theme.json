@@ -5,11 +5,13 @@
 	"doctype": "DocType",
 	"engine": "InnoDB",
 	"field_order": [
+		"tab_break_overview",
 		"company",
 		"theme_preset",
 		"column_break_omnexa_3",
 		"apply_to_public_site",
 		"apply_to_desk",
+		"tab_break_1",
 		"section_colors",
 		"primary_color",
 		"primary_contrast",
@@ -17,6 +19,7 @@
 		"background_color",
 		"surface_color",
 		"foreground_color",
+		"tab_break_2",
 		"section_typography",
 		"font_stack_for_web",
 		"desk_theme_mode",
@@ -24,20 +27,53 @@
 		"desk_base_font_size",
 		"desk_ui_density",
 		"desk_radius_scale",
+		"tab_break_3",
 		"section_brand_assets",
 		"logo",
 		"logo_url",
 		"favicon",
 		"favicon_url",
+		"tab_break_4",
 		"section_publish",
 		"published_at",
 		"published_by",
 		"publish_note",
+		"tab_break_5",
 		"governance_section",
 		"change_ticket",
 		"owner_user"
 	],
 	"fields": [
+		{
+			"fieldname": "tab_break_overview",
+			"fieldtype": "Tab Break",
+			"label": "Overview"
+		},
+		{
+			"fieldname": "tab_break_1",
+			"fieldtype": "Tab Break",
+			"label": "Details"
+		},
+		{
+			"fieldname": "tab_break_2",
+			"fieldtype": "Tab Break",
+			"label": "Further"
+		},
+		{
+			"fieldname": "tab_break_3",
+			"fieldtype": "Tab Break",
+			"label": "Posting"
+		},
+		{
+			"fieldname": "tab_break_4",
+			"fieldtype": "Tab Break",
+			"label": "More"
+		},
+		{
+			"fieldname": "tab_break_5",
+			"fieldtype": "Tab Break",
+			"label": "References"
+		},
 		{
 			"fieldname": "company",
 			"fieldtype": "Link",
@@ -226,7 +262,7 @@
 	"grid_page_length": 50,
 	"index_web_pages_for_search": 0,
 	"links": [],
-	"modified": "2026-04-15 00:00:00",
+	"modified": "2026-05-07 12:00:00",
 	"modified_by": "Administrator",
 	"module": "Omnexa Experience",
 	"name": "Experience Tenant Theme",

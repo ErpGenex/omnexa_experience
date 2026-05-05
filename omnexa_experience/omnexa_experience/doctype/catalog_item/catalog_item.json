@@ -6,12 +6,14 @@
 	"doctype": "DocType",
 	"engine": "InnoDB",
 	"field_order": [
+		"tab_break_overview",
 		"company",
 		"commerce_segment",
 		"column_break_omnexa_1",
 		"slug",
 		"title_en",
 		"title_ar",
+		"tab_break_1",
 		"classification_section",
 		"item_type",
 		"internal_item_code",
@@ -21,6 +23,16 @@
 		"published"
 	],
 	"fields": [
+		{
+			"fieldname": "tab_break_overview",
+			"fieldtype": "Tab Break",
+			"label": "Overview"
+		},
+		{
+			"fieldname": "tab_break_1",
+			"fieldtype": "Tab Break",
+			"label": "Details"
+		},
 		{
 			"fieldname": "company",
 			"fieldtype": "Link",
@@ -104,7 +116,7 @@
 	"grid_page_length": 50,
 	"index_web_pages_for_search": 1,
 	"links": [],
-	"modified": "2026-04-13 00:00:00",
+	"modified": "2026-05-07 12:00:00",
 	"modified_by": "Administrator",
 	"module": "Omnexa Experience",
 	"name": "Catalog Item",

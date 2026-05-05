@@ -6,16 +6,20 @@
 	"doctype": "DocType",
 	"engine": "InnoDB",
 	"field_order": [
+		"tab_break_overview",
 		"company",
 		"branch",
 		"commerce_segment",
+		"tab_break_1",
 		"channel_section",
 		"order_channel",
 		"expected_fulfillment_date",
+		"tab_break_2",
 		"customer_section",
 		"customer_email",
 		"idempotency_key",
 		"status",
+		"tab_break_3",
 		"lines_section",
 		"lines",
 		"grand_total",
@@ -25,6 +29,26 @@
 		"external_reference"
 	],
 	"fields": [
+		{
+			"fieldname": "tab_break_overview",
+			"fieldtype": "Tab Break",
+			"label": "Overview"
+		},
+		{
+			"fieldname": "tab_break_1",
+			"fieldtype": "Tab Break",
+			"label": "Details"
+		},
+		{
+			"fieldname": "tab_break_2",
+			"fieldtype": "Tab Break",
+			"label": "Further"
+		},
+		{
+			"fieldname": "tab_break_3",
+			"fieldtype": "Tab Break",
+			"label": "Posting"
+		},
 		{
 			"fieldname": "company",
 			"fieldtype": "Link",
@@ -135,7 +159,7 @@
 	"index_web_pages_for_search": 1,
 	"is_submittable": 1,
 	"links": [],
-	"modified": "2026-04-19 23:00:00",
+	"modified": "2026-05-07 12:00:00",
 	"modified_by": "Administrator",
 	"module": "Omnexa Experience",
 	"name": "Web Order",

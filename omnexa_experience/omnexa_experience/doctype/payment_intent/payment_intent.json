@@ -5,12 +5,15 @@
 	"doctype": "DocType",
 	"engine": "InnoDB",
 	"field_order": [
+		"tab_break_overview",
 		"company",
 		"web_order",
 		"sales_invoice",
+		"tab_break_1",
 		"amount_section",
 		"amount",
 		"currency",
+		"tab_break_2",
 		"gateway_section",
 		"client_secret_ref",
 		"status",
@@ -19,6 +22,21 @@
 		"external_reference"
 	],
 	"fields": [
+		{
+			"fieldname": "tab_break_overview",
+			"fieldtype": "Tab Break",
+			"label": "Overview"
+		},
+		{
+			"fieldname": "tab_break_1",
+			"fieldtype": "Tab Break",
+			"label": "Details"
+		},
+		{
+			"fieldname": "tab_break_2",
+			"fieldtype": "Tab Break",
+			"label": "Further"
+		},
 		{
 			"fieldname": "company",
 			"fieldtype": "Link",
@@ -96,7 +114,7 @@
 	"grid_page_length": 50,
 	"index_web_pages_for_search": 1,
 	"links": [],
-	"modified": "2026-04-13 00:00:00",
+	"modified": "2026-05-07 12:00:00",
 	"modified_by": "Administrator",
 	"module": "Omnexa Experience",
 	"name": "Payment Intent",
