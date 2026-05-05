@@ -46,7 +46,7 @@
 			"fieldtype": "Select",
 			"in_list_view": 1,
 			"label": "Commerce segment",
-			"options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nTrading\nServices\nFinancial Services\nStatutory Audit"
+			"options": "\nGeneral\nConstruction\nEngineering Consulting\nHealthcare\nEducation\nManufacturing\nAgriculture\nTourism\nHotel Assets (إدارة أصول الفنادق)\nTrading\nServices\nFinancial Services\nStatutory Audit"
 		},
 		{
 			"fieldname": "channel_section",
