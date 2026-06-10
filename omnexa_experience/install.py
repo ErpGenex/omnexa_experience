@@ -26,6 +26,36 @@ def enforce_supported_frappe_version():
 		)
 
 
+def _ensure_portal_roles():
+	roles = (
+		("Portal Customer",),
+		("Portal Doctor",),
+		("Portal Supplier",),
+		("Portal Loan Client",),
+	)
+	for role_name in roles:
+		if frappe.db.exists("Role", role_name):
+			continue
+		doc = frappe.new_doc("Role")
+		doc.update({"role_name": role_name, "desk_access": 0, "two_factor_auth": 0})
+		doc.insert(ignore_permissions=True)
+
+
+def _ensure_default_portal_hub():
+	if not frappe.db.exists("DocType", "Experience Portal Hub"):
+		return
+	for company in frappe.get_all("Company", pluck="name", limit=5):
+		if frappe.db.exists("Experience Portal Hub", company):
+			continue
+		branch = frappe.db.get_value("Branch", {"company": company}, "name")
+		doc = frappe.new_doc("Experience Portal Hub")
+		doc.company = company
+		doc.default_branch = branch
+		doc.is_enabled = 1
+		doc.site_slug = frappe.scrub(company).replace("_", "-")[:60]
+		doc.insert(ignore_permissions=True)
+
+
 def _ensure_default_theme():
 	if not frappe.db.exists("DocType", "Experience Tenant Theme"):
 		return
@@ -48,8 +78,12 @@ def _ensure_default_theme():
 
 
 def after_install():
+	_ensure_portal_roles()
 	_ensure_default_theme()
+	_ensure_default_portal_hub()
 
 
 def after_migrate():
+	_ensure_portal_roles()
 	_ensure_default_theme()
+	_ensure_default_portal_hub()

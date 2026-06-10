@@ -1,0 +1,295 @@
+{
+	"actions": [],
+	"allow_rename": 0,
+	"autoname": "field:company",
+	"creation": "2026-06-10 12:00:00",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"company",
+		"default_branch",
+		"is_enabled",
+		"site_slug",
+		"section_branding",
+		"portal_name_ar",
+		"portal_name_en",
+		"tagline_ar",
+		"tagline_en",
+		"portal_logo",
+		"primary_color",
+		"column_break_branding",
+		"contact_phone",
+		"contact_email",
+		"section_verticals",
+		"enable_healthcare",
+		"enable_trading",
+		"enable_manufacturing",
+		"enable_services",
+		"enable_car_rental",
+		"enable_education",
+		"enable_finance",
+		"enable_tourism",
+		"enable_restaurant",
+		"enable_property",
+		"column_break_verticals",
+		"enable_agriculture",
+		"enable_engineering",
+		"enable_leasing",
+		"section_sub_portals",
+		"enable_patient_portal",
+		"enable_customer_portal",
+		"enable_doctor_portal",
+		"enable_supplier_portal",
+		"enable_loan_portal"
+	],
+	"fields": [
+		{
+			"fieldname": "company",
+			"fieldtype": "Link",
+			"in_list_view": 1,
+			"label": "Company",
+			"options": "Company",
+			"reqd": 1,
+			"unique": 1
+		},
+		{
+			"fieldname": "default_branch",
+			"fieldtype": "Link",
+			"label": "Default branch",
+			"options": "Branch"
+		},
+		{
+			"default": "1",
+			"fieldname": "is_enabled",
+			"fieldtype": "Check",
+			"in_list_view": 1,
+			"label": "Enable public portal"
+		},
+		{
+			"description": "Public URL: /portal?site=your-slug",
+			"fieldname": "site_slug",
+			"fieldtype": "Data",
+			"in_list_view": 1,
+			"label": "Site slug",
+			"unique": 1
+		},
+		{
+			"fieldname": "section_branding",
+			"fieldtype": "Section Break",
+			"label": "Branding"
+		},
+		{
+			"default": "بوابة ErpGenEx",
+			"fieldname": "portal_name_ar",
+			"fieldtype": "Data",
+			"label": "Portal name (Arabic)"
+		},
+		{
+			"default": "ErpGenEx Portal",
+			"fieldname": "portal_name_en",
+			"fieldtype": "Data",
+			"label": "Portal name (English)"
+		},
+		{
+			"default": "بوابة موحدة لجميع أنشطتك",
+			"fieldname": "tagline_ar",
+			"fieldtype": "Data",
+			"label": "Tagline (Arabic)"
+		},
+		{
+			"default": "One portal for all your business activities",
+			"fieldname": "tagline_en",
+			"fieldtype": "Data",
+			"label": "Tagline (English)"
+		},
+		{
+			"fieldname": "portal_logo",
+			"fieldtype": "Attach Image",
+			"label": "Logo"
+		},
+		{
+			"default": "#003366",
+			"fieldname": "primary_color",
+			"fieldtype": "Data",
+			"label": "Primary color"
+		},
+		{
+			"fieldname": "column_break_branding",
+			"fieldtype": "Column Break"
+		},
+		{
+			"fieldname": "contact_phone",
+			"fieldtype": "Data",
+			"label": "Contact phone"
+		},
+		{
+			"fieldname": "contact_email",
+			"fieldtype": "Data",
+			"label": "Contact email"
+		},
+		{
+			"fieldname": "section_verticals",
+			"fieldtype": "Section Break",
+			"label": "Business activities (auto-detected if app installed)"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_healthcare",
+			"fieldtype": "Check",
+			"label": "Healthcare / clinics"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_trading",
+			"fieldtype": "Check",
+			"label": "Trading / commerce"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_manufacturing",
+			"fieldtype": "Check",
+			"label": "Manufacturing"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_services",
+			"fieldtype": "Check",
+			"label": "Professional services"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_car_rental",
+			"fieldtype": "Check",
+			"label": "Car rental"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_education",
+			"fieldtype": "Check",
+			"label": "Education"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_finance",
+			"fieldtype": "Check",
+			"label": "Finance / banks / loans"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_tourism",
+			"fieldtype": "Check",
+			"label": "Tourism / hospitality"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_restaurant",
+			"fieldtype": "Check",
+			"label": "Restaurant / F&B"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_property",
+			"fieldtype": "Check",
+			"label": "Property / real estate"
+		},
+		{
+			"fieldname": "column_break_verticals",
+			"fieldtype": "Column Break"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_agriculture",
+			"fieldtype": "Check",
+			"label": "Agriculture"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_engineering",
+			"fieldtype": "Check",
+			"label": "Engineering consulting"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_leasing",
+			"fieldtype": "Check",
+			"label": "Leasing / equipment finance"
+		},
+		{
+			"fieldname": "section_sub_portals",
+			"fieldtype": "Section Break",
+			"label": "Sub-portals (roles)"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_patient_portal",
+			"fieldtype": "Check",
+			"label": "Patients portal"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_customer_portal",
+			"fieldtype": "Check",
+			"label": "Customers portal"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_doctor_portal",
+			"fieldtype": "Check",
+			"label": "Doctors / practitioners portal"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_supplier_portal",
+			"fieldtype": "Check",
+			"label": "Suppliers portal"
+		},
+		{
+			"default": "1",
+			"fieldname": "enable_loan_portal",
+			"fieldtype": "Check",
+			"label": "Loan clients portal"
+		}
+	],
+	"grid_page_length": 50,
+	"index_web_pages_for_search": 1,
+	"links": [],
+	"modified": "2026-06-10 12:00:00",
+	"modified_by": "Administrator",
+	"module": "Omnexa Experience",
+	"name": "Experience Portal Hub",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		},
+		{
+			"create": 1,
+			"delete": 0,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "Company Admin",
+			"share": 1,
+			"write": 1
+		},
+		{
+			"read": 1,
+			"role": "Desk User"
+		}
+	],
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [],
+	"track_changes": 1
+}

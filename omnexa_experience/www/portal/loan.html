@@ -1,0 +1,10 @@
+{% extends "templates/web.html" %}
+{% block title %}Loan Client Portal{% endblock %}
+{% block page_content %}
+<div class="ox-portal">
+  <header class="oxp-header" id="oxp-header"></header>
+  <main id="oxp-main"></main>
+  <footer class="oxp-footer" id="oxp-footer"></footer>
+</div>
+<script>document.addEventListener("DOMContentLoaded", () => OmnexaPortal.init("loan"));</script>
+{% endblock %}

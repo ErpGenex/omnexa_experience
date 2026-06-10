@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap");
+
+.ox-portal {
+	--oxp-primary: var(--ox-primary, #003366);
+	--oxp-accent: #e6f0f9;
+	--oxp-text: #1a2b3c;
+	--oxp-muted: #5c6b7a;
+	--oxp-radius: 12px;
+	--oxp-shadow: 0 8px 30px rgba(0, 51, 102, 0.08);
+	font-family: "Tajawal", var(--ox-font-sans, system-ui), sans-serif;
+	color: var(--oxp-text);
+	background: #f4f8fb;
+	min-height: 70vh;
+}
+
+.ox-portal * { box-sizing: border-box; }
+
+.ox-portal .oxp-wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+.ox-portal .oxp-header {
+	background: #fff;
+	box-shadow: 0 2px 16px rgba(0,0,0,.06);
+	position: sticky; top: 0; z-index: 40;
+}
+
+.ox-portal .oxp-header-inner {
+	display: flex; align-items: center; justify-content: space-between;
+	gap: 16px; padding: 14px 0; flex-wrap: wrap;
+}
+
+.ox-portal .oxp-brand {
+	display: flex; align-items: center; gap: 12px;
+	font-weight: 800; font-size: 1.1rem; color: var(--oxp-primary);
+}
+
+.ox-portal .oxp-brand img { width: 42px; height: 42px; object-fit: contain; border-radius: 10px; }
+
+.ox-portal .oxp-nav { display: flex; gap: 14px; flex-wrap: wrap; }
+.ox-portal .oxp-nav a { color: var(--oxp-text); font-weight: 600; text-decoration: none; }
+.ox-portal .oxp-nav a:hover, .ox-portal .oxp-nav a.active { color: var(--oxp-primary); }
+
+.ox-portal .oxp-hero {
+	background: linear-gradient(135deg, var(--oxp-primary), #0a4f8c);
+	color: #fff; padding: 56px 0 48px;
+}
+
+.ox-portal .oxp-hero h1 { margin: 0 0 10px; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.ox-portal .oxp-hero p { margin: 0; opacity: .92; line-height: 1.7; }
+
+.ox-portal .oxp-section { padding: 40px 0; }
+.ox-portal .oxp-section-title { margin-bottom: 20px; }
+.ox-portal .oxp-section-title h2 { margin: 0 0 6px; color: var(--oxp-primary); }
+
+.ox-portal .oxp-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.ox-portal .oxp-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.ox-portal .oxp-grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+
+.ox-portal .oxp-card {
+	background: #fff; border-radius: var(--oxp-radius); box-shadow: var(--oxp-shadow);
+	padding: 20px; transition: transform .15s ease;
+}
+
+.ox-portal .oxp-card:hover { transform: translateY(-3px); }
+.ox-portal .oxp-card-link { cursor: pointer; text-decoration: none; color: inherit; display: block; }
+.ox-portal .oxp-icon { font-size: 2rem; margin-bottom: 8px; }
+
+.ox-portal .oxp-btn {
+	display: inline-flex; align-items: center; justify-content: center;
+	border: 0; border-radius: 999px; padding: 10px 20px;
+	font-weight: 700; cursor: pointer; text-decoration: none;
+}
+
+.ox-portal .oxp-btn-primary { background: var(--oxp-primary); color: #fff; }
+.ox-portal .oxp-btn-outline { background: #fff; color: var(--oxp-primary); border: 2px solid var(--oxp-primary); }
+.ox-portal .oxp-btn-light { background: var(--oxp-accent); color: var(--oxp-primary); }
+
+.ox-portal .oxp-lang {
+	border: 1px solid #d7e3ef; background: #fff; border-radius: 999px;
+	padding: 6px 12px; cursor: pointer; font-weight: 600;
+}
+
+.ox-portal .oxp-subhero {
+	background: #fff; margin-top: -24px; position: relative; z-index: 2;
+	border-radius: var(--oxp-radius); box-shadow: var(--oxp-shadow); padding: 20px;
+}
+
+.ox-portal .oxp-list { margin: 0; padding: 0; list-style: none; }
+.ox-portal .oxp-list li {
+	padding: 10px 0; border-bottom: 1px solid #edf2f7;
+	display: flex; justify-content: space-between; gap: 12px;
+}
+
+.ox-portal .oxp-footer {
+	background: #0b2540; color: #dbe8f5; padding: 36px 0 20px; margin-top: 32px;
+}
+
+.ox-portal .oxp-empty { text-align: center; color: var(--oxp-muted); padding: 32px 0; }
+
+@media (max-width: 960px) {
+	.ox-portal .oxp-grid-4, .ox-portal .oxp-grid-3, .ox-portal .oxp-grid-5 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+	.ox-portal .oxp-grid-4, .ox-portal .oxp-grid-3, .ox-portal .oxp-grid-5 { grid-template-columns: 1fr; }
+}
+
+.ox-portal[dir="rtl"] .oxp-header-inner, .ox-portal[dir="rtl"] .oxp-list li { direction: rtl; }

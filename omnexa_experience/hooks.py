@@ -28,8 +28,28 @@ required_apps = ["omnexa_core", "omnexa_accounting"]
 # Desk theme (ERPGenEx Theme 0426) is loaded by omnexa_theme_manager.
 
 # include js, css files in header of web template
-web_include_css = "/assets/omnexa_experience/css/design_tokens.css"
-# web_include_js = "/assets/omnexa_experience/js/omnexa_experience.js"
+web_include_css = [
+	"/assets/omnexa_experience/css/design_tokens.css",
+	"/assets/omnexa_experience/css/portal_shell.css",
+]
+web_include_js = "/assets/omnexa_experience/js/portal_shell.js"
+
+doctype_js = {
+	"Experience Portal Hub": "omnexa_experience/doctype/experience_portal_hub/experience_portal_hub.js",
+}
+
+website_route_rules = [
+	{"from_route": "/portal/vertical/<vertical>", "to_route": "portal/vertical"},
+]
+
+role_home_page = {
+	"Patient Portal User": "portal/patient",
+	"Portal Customer": "portal/customer",
+	"Portal Doctor": "portal/doctor",
+	"Portal Supplier": "portal/supplier",
+	"Portal Loan Client": "portal/loan",
+	"Customer": "portal/customer",
+}
 
 # Tenant CSS token overrides on public web (see DocType Experience Tenant Theme)
 update_website_context = [
