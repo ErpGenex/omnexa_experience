@@ -1,16 +1,29 @@
 frappe.ui.form.on("Experience Portal Hub", {
 	refresh(frm) {
 		if (frm.is_new()) return;
+		frm.add_custom_button(__("Copy activity website"), () => copy_link(frm, "activity_site"), __("Share"));
 		frm.add_custom_button(__("Copy portal link"), () => copy_link(frm, "home"), __("Share"));
 		frm.add_custom_button(__("Copy customer portal"), () => copy_link(frm, "customer"), __("Share"));
-		frm.add_custom_button(__("Share portal"), () => share_link(frm), __("Share"));
+		frm.add_custom_button(__("Share website"), () => share_link(frm), __("Share"));
 		if (frm.doc.is_enabled && frm.doc.site_slug) {
-			const url = `/portal?site=${encodeURIComponent(frm.doc.site_slug)}`;
-			frm.dashboard.add_comment(
-				__("Public URL: {0}", [`<a href="${url}" target="_blank">${url}</a>`]),
-				"blue",
-				true
-			);
+			frappe.call({
+				method: "omnexa_experience.omnexa_experience.public_portal.get_portal_urls",
+				args: { company: frm.doc.company },
+				callback(r) {
+					const siteUrl = (r.message.urls && r.message.urls.activity_site) || r.message.public_url;
+					const portalUrl = `/portal?site=${encodeURIComponent(frm.doc.site_slug)}`;
+					frm.dashboard.add_comment(
+						__("Activity website: {0}", [`<a href="${siteUrl}" target="_blank">${siteUrl}</a>`]),
+						"blue",
+						true
+					);
+					frm.dashboard.add_comment(
+						__("Unified portal: {0}", [`<a href="${portalUrl}" target="_blank">${portalUrl}</a>`]),
+						"blue",
+						true
+					);
+				},
+			});
 		}
 	},
 });

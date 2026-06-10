@@ -39,6 +39,42 @@
 .ox-portal .oxp-nav a { color: var(--oxp-text); font-weight: 600; text-decoration: none; }
 .ox-portal .oxp-nav a:hover, .ox-portal .oxp-nav a.active { color: var(--oxp-primary); }
 
+.ox-portal .oxp-hero-single { padding: 64px 0 48px; }
+
+.ox-portal .oxp-hero-single-grid {
+	display: grid;
+	grid-template-columns: 1.2fr 0.8fr;
+	gap: 28px;
+	align-items: center;
+}
+
+.ox-portal .oxp-activity-badge {
+	display: inline-block;
+	background: rgba(255,255,255,.15);
+	border-radius: 999px;
+	padding: 6px 14px;
+	font-size: .85rem;
+	margin-bottom: 14px;
+}
+
+.ox-portal .oxp-hero-lead { font-size: 1.05rem; line-height: 1.8; opacity: .95; max-width: 560px; }
+.ox-portal .oxp-hero-sub { opacity: .8; margin-top: 8px; }
+.ox-portal .oxp-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+
+.ox-portal .oxp-hero-panel {
+	background: rgba(255,255,255,.12);
+	border: 1px solid rgba(255,255,255,.18);
+	border-radius: var(--oxp-radius);
+	padding: 28px;
+	text-align: center;
+}
+
+.ox-portal .oxp-hero-panel-icon { font-size: 3.5rem; margin-bottom: 12px; }
+
+@media (max-width: 960px) {
+	.ox-portal .oxp-hero-single-grid { grid-template-columns: 1fr; }
+}
+
 .ox-portal .oxp-hero {
 	background: linear-gradient(135deg, var(--oxp-primary), #0a4f8c);
 	color: #fff; padding: 56px 0 48px;

@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap");
+
+.act-site {
+	--act-primary: #003366;
+	--act-accent: #e6f0f9;
+	--act-text: #1a2b3c;
+	--act-muted: #5c6b7a;
+	--act-radius: 12px;
+	--act-shadow: 0 10px 40px rgba(0, 51, 102, 0.1);
+	font-family: "Tajawal", system-ui, sans-serif;
+	color: var(--act-text);
+	background: #f4f8fb;
+}
+
+.act-site * { box-sizing: border-box; }
+.act-site a { text-decoration: none; color: inherit; }
+.act-site .act-wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+.act-site .act-header {
+	background: #fff;
+	box-shadow: 0 2px 20px rgba(0,0,0,.06);
+	position: sticky; top: 0; z-index: 50;
+}
+
+.act-site .act-header-inner {
+	display: flex; align-items: center; justify-content: space-between;
+	gap: 16px; padding: 14px 0; flex-wrap: wrap;
+}
+
+.act-site .act-brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.1rem; color: var(--act-primary); }
+.act-site .act-brand img { width: 44px; height: 44px; border-radius: 10px; object-fit: contain; }
+.act-site .act-nav { display: flex; gap: 16px; flex-wrap: wrap; }
+.act-site .act-nav a { font-weight: 600; color: var(--act-text); }
+.act-site .act-nav a:hover, .act-site .act-nav a.active { color: var(--act-primary); }
+
+.act-site .act-btn {
+	display: inline-flex; align-items: center; justify-content: center;
+	border: 0; border-radius: 999px; padding: 11px 22px; font-weight: 700; cursor: pointer;
+}
+.act-site .act-btn-primary { background: var(--act-primary); color: #fff; box-shadow: 0 8px 24px rgba(0,51,102,.22); }
+.act-site .act-btn-outline { background: #fff; color: var(--act-primary); border: 2px solid var(--act-primary); }
+.act-site .act-lang { border: 1px solid #d7e3ef; background: #fff; border-radius: 999px; padding: 6px 12px; cursor: pointer; font-weight: 600; }
+
+.act-site .act-hero-pro {
+	position: relative; min-height: 520px; display: flex; align-items: center;
+	color: #fff; overflow: hidden;
+}
+
+.act-site .act-hero-pro::before {
+	content: "";
+	position: absolute; inset: 0;
+	background: linear-gradient(135deg, rgba(0,51,102,.88) 0%, rgba(0,51,102,.55) 55%, rgba(0,51,102,.35) 100%);
+	z-index: 1;
+}
+
+.act-site .act-hero-bg {
+	position: absolute; inset: 0;
+	background-size: cover; background-position: center;
+}
+
+.act-site .act-hero-content { position: relative; z-index: 2; padding: 72px 0 56px; max-width: 640px; }
+.act-site .act-hero-content h1 { font-size: clamp(2rem, 4vw, 3rem); margin: 0 0 14px; line-height: 1.2; }
+.act-site .act-hero-content p { font-size: 1.05rem; line-height: 1.8; opacity: .95; }
+.act-site .act-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+
+.act-site .act-features-bar {
+	background: #fff; margin-top: -32px; position: relative; z-index: 3;
+	border-radius: var(--act-radius); box-shadow: var(--act-shadow);
+	padding: 20px 24px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;
+}
+
+.act-site .act-feature { text-align: center; font-size: .82rem; font-weight: 600; color: var(--act-primary); }
+.act-site .act-feature span { display: block; font-size: 1.35rem; margin-bottom: 6px; }
+
+.act-site .act-section { padding: 56px 0; }
+.act-site .act-section-title { text-align: center; margin-bottom: 28px; }
+.act-site .act-section-title h2 { margin: 0 0 8px; color: var(--act-primary); font-size: 1.8rem; }
+
+.act-site .act-stats { background: var(--act-primary); color: #fff; padding: 44px 0; }
+.act-site .act-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center; }
+.act-site .act-stat-num { font-size: 2rem; font-weight: 800; }
+.act-site .act-stat-label { opacity: .88; }
+
+.act-site .act-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.act-site .act-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+.act-site .act-card {
+	background: #fff; border-radius: var(--act-radius); box-shadow: var(--act-shadow);
+	overflow: hidden; transition: transform .15s ease;
+}
+.act-site .act-card:hover { transform: translateY(-4px); }
+.act-site .act-card-img { width: 100%; height: 180px; object-fit: cover; display: block; background: var(--act-accent); }
+.act-site .act-card-body { padding: 18px; }
+
+.act-site .act-product-card .act-card-img { height: 220px; }
+.act-site .act-footer { background: #0b2540; color: #dbe8f5; padding: 40px 0 24px; margin-top: 40px; }
+
+@media (max-width: 960px) {
+	.act-site .act-features-bar { grid-template-columns: repeat(3, 1fr); }
+	.act-site .act-stats-grid, .act-site .act-grid-3, .act-site .act-grid-4 { grid-template-columns: repeat(2, 1fr); }
+	.act-site .act-hero-pro { min-height: 420px; }
+}
+
+@media (max-width: 560px) {
+	.act-site .act-features-bar { grid-template-columns: repeat(2, 1fr); }
+	.act-site .act-grid-3, .act-site .act-grid-4, .act-site .act-stats-grid { grid-template-columns: 1fr; }
+}
+
+.act-site[dir="rtl"] .act-header-inner, .act-site[dir="rtl"] .act-hero-content { direction: rtl; }

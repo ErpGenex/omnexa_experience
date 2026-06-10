@@ -43,6 +43,8 @@ def get_vertical_snapshot(*, vertical_id: str, company: str, branch: str | None 
 		return _commerce_snapshot(company, branch, base, label="Agri products")
 	if vertical_id == "engineering" and _has_app("omnexa_engineering_consulting"):
 		return _engineering_snapshot(company, branch, base)
+	if vertical_id == "construction" and _has_app("omnexa_construction"):
+		return _construction_snapshot(company, branch, base)
 
 	return base
 
@@ -168,6 +170,21 @@ def _property_snapshot(company: str, branch: str | None, base: dict) -> dict:
 def _engineering_snapshot(company: str, branch: str | None, base: dict) -> dict:
 	out = dict(base)
 	out["actions"].append({"label": "Client submittals", "url": "/engineering-consulting-submittals"})
+	return out
+
+
+def _construction_snapshot(company: str, branch: str | None, base: dict) -> dict:
+	out = dict(base)
+	out["label"] = "Construction projects"
+	if frappe.db.exists("DocType", "Construction Project"):
+		projects = frappe.get_all(
+			"Construction Project",
+			filters={"company": company},
+			fields=["name", "project_name", "status"],
+			limit=6,
+			order_by="modified desc",
+		)
+		out["items"] = projects
 	return out
 
 

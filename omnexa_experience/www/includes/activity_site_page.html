@@ -1,0 +1,10 @@
+<div class="act-site">
+  <header class="act-header" id="act-header"></header>
+  <main id="act-main"></main>
+  <footer class="act-footer" id="act-footer"></footer>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    ActivitySite.init("{{ page|default('home') }}");
+  });
+</script>

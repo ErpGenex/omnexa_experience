@@ -9,10 +9,14 @@ import frappe
 from frappe import _
 from frappe.utils import get_url
 
+from omnexa_experience.omnexa_experience.activity_sites import build_activity_site_url
 from omnexa_experience.omnexa_experience.portal_adapters import get_sub_portal_dashboard, get_vertical_snapshot
 from omnexa_experience.omnexa_experience.portal_registry import (
+	activity_profile,
+	get_company_business_activity,
 	list_active_sub_portals,
 	list_active_verticals,
+	primary_vertical_id_for_activity,
 	sub_portal_by_id,
 	vertical_by_id,
 )
@@ -103,11 +107,17 @@ def resolve_portal(*, site: str | None = None, company: str | None = None, branc
 	frappe.throw(_("Site slug or company is required."))
 
 
-def build_portal_urls(*, company: str, site_slug: str | None = None) -> dict:
+def build_portal_urls(
+	*,
+	company: str,
+	site_slug: str | None = None,
+	branch: str | None = None,
+	activity: str | None = None,
+) -> dict:
 	q = f"site={site_slug}" if site_slug else f"company={company}"
 	suffix = f"?{q}"
 	base = get_url("/portal")
-	return {
+	urls = {
 		"home": f"{base}{suffix}",
 		"patient": f"{base}/patient{suffix}",
 		"customer": f"{base}/customer{suffix}",
@@ -115,6 +125,13 @@ def build_portal_urls(*, company: str, site_slug: str | None = None) -> dict:
 		"supplier": f"{base}/supplier{suffix}",
 		"loan": f"{base}/loan{suffix}",
 	}
+	urls["activity_site"] = build_activity_site_url(
+		company=company,
+		activity=activity,
+		branch=branch,
+		site_slug=site_slug,
+	)
+	return urls
 
 
 @frappe.whitelist(allow_guest=True)
@@ -124,27 +141,48 @@ def get_portal_config(site: str | None = None, company: str | None = None, branc
 	branch = ctx.get("branch")
 	hub = _hub_doc(company)
 	if not hub:
-		# Fallback config when hub not configured yet
+		activity = get_company_business_activity(company)
+		profile = activity_profile(activity)
 		return {
 			"company": company,
 			"branch": branch,
+			"business_activity": activity,
+			"layout_mode": "single_activity",
+			"primary_vertical": primary_vertical_id_for_activity(activity),
 			"portal_name_ar": company,
 			"portal_name_en": company,
-			"tagline_ar": "بوابة موحدة",
-			"tagline_en": "Unified portal",
-			"primary_color": "#003366",
+			"tagline_ar": profile.get("tagline_ar"),
+			"tagline_en": profile.get("tagline_en"),
+			"hero_text_ar": profile.get("hero_ar"),
+			"hero_text_en": profile.get("hero_en"),
+			"primary_color": profile.get("accent", "#003366"),
 			"verticals": [],
 			"sub_portals": [],
-			"urls": build_portal_urls(company=company, site_slug=ctx.get("site_slug")),
+			"urls": build_portal_urls(
+				company=company,
+				site_slug=ctx.get("site_slug"),
+				branch=branch,
+				activity=activity,
+			),
 			"is_configured": False,
 		}
 
+	activity = get_company_business_activity(company)
+	profile = activity_profile(activity)
 	verticals = list_active_verticals(hub)
 	sub_portals = list_active_sub_portals(hub, verticals)
-	urls = build_portal_urls(company=company, site_slug=hub.site_slug)
+	primary_vertical = primary_vertical_id_for_activity(activity) or (verticals[0]["id"] if len(verticals) == 1 else "")
+	urls = build_portal_urls(
+		company=company,
+		site_slug=hub.site_slug,
+		branch=branch,
+		activity=activity,
+	)
 
-	# Bridge to healthcare hospital site when available
-	if branch and "omnexa_healthcare" in frappe.get_installed_apps():
+	# Legacy alias for healthcare hospital site
+	if urls.get("activity_site") and activity == "Healthcare":
+		urls["hospital"] = urls["activity_site"]
+	elif branch and "omnexa_healthcare" in frappe.get_installed_apps():
 		hospital_slug = frappe.db.get_value("Healthcare Branch Website", {"branch": branch, "is_enabled": 1}, "site_slug")
 		if hospital_slug:
 			urls["hospital"] = get_url(f"/hospital?site={hospital_slug}")
@@ -153,12 +191,17 @@ def get_portal_config(site: str | None = None, company: str | None = None, branc
 		"company": company,
 		"branch": branch,
 		"site_slug": hub.site_slug,
-		"portal_name_ar": hub.portal_name_ar,
-		"portal_name_en": hub.portal_name_en,
-		"tagline_ar": hub.tagline_ar,
-		"tagline_en": hub.tagline_en,
+		"business_activity": activity,
+		"layout_mode": "single_activity",
+		"primary_vertical": primary_vertical,
+		"portal_name_ar": hub.portal_name_ar or company,
+		"portal_name_en": hub.portal_name_en or company,
+		"tagline_ar": hub.tagline_ar or profile.get("tagline_ar"),
+		"tagline_en": hub.tagline_en or profile.get("tagline_en"),
+		"hero_text_ar": profile.get("hero_ar"),
+		"hero_text_en": profile.get("hero_en"),
 		"logo": hub.portal_logo,
-		"primary_color": hub.primary_color or "#003366",
+		"primary_color": hub.primary_color or profile.get("accent") or "#003366",
 		"contact": {"phone": hub.contact_phone, "email": hub.contact_email},
 		"verticals": verticals,
 		"sub_portals": sub_portals,
@@ -201,6 +244,15 @@ def get_portal_urls(company: str) -> dict:
 		frappe.throw(_("Company is required"))
 	if not frappe.has_permission("Experience Portal Hub", "read"):
 		frappe.throw(_("Not permitted"), frappe.PermissionError)
-	slug = frappe.db.get_value("Experience Portal Hub", company, "site_slug")
-	urls = build_portal_urls(company=company, site_slug=slug)
-	return {"company": company, "site_slug": slug, "public_url": urls["home"], "urls": urls}
+	hub = frappe.db.get_value(
+		"Experience Portal Hub",
+		company,
+		["site_slug", "default_branch"],
+		as_dict=True,
+	)
+	slug = hub.site_slug if hub else None
+	branch = hub.default_branch if hub else frappe.db.get_value("Branch", {"company": company}, "name")
+	activity = get_company_business_activity(company)
+	urls = build_portal_urls(company=company, site_slug=slug, branch=branch, activity=activity)
+	public_url = urls.get("activity_site") or urls["home"]
+	return {"company": company, "site_slug": slug, "public_url": public_url, "urls": urls}

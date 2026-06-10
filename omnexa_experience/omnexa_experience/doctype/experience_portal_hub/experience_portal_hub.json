@@ -16,11 +16,14 @@
 		"tagline_ar",
 		"tagline_en",
 		"portal_logo",
+		"hero_image",
 		"primary_color",
 		"column_break_branding",
 		"contact_phone",
 		"contact_email",
 		"section_verticals",
+		"follow_company_activity",
+		"verticals_help",
 		"enable_healthcare",
 		"enable_trading",
 		"enable_manufacturing",
@@ -108,6 +111,12 @@
 			"label": "Logo"
 		},
 		{
+			"description": "Hero background on the public activity website. Leave empty for a professional default image.",
+			"fieldname": "hero_image",
+			"fieldtype": "Attach Image",
+			"label": "Hero image"
+		},
+		{
 			"default": "#003366",
 			"fieldname": "primary_color",
 			"fieldtype": "Data",
@@ -130,10 +139,23 @@
 		{
 			"fieldname": "section_verticals",
 			"fieldtype": "Section Break",
-			"label": "Business activities (auto-detected if app installed)"
+			"label": "Public website scope"
 		},
 		{
 			"default": "1",
+			"description": "When enabled, the public site shows only the vertical matching Company → Business Activity.",
+			"fieldname": "follow_company_activity",
+			"fieldtype": "Check",
+			"label": "Follow company business activity"
+		},
+		{
+			"fieldname": "verticals_help",
+			"fieldtype": "HTML",
+			"label": "Activity note",
+			"options": "<div class=\"text-muted small\">Set <b>Business Activity</b> on the <b>Company</b> record. The portal home page displays that industry only (e.g. Healthcare → hospital site, Trading → shop).</div>"
+		},
+		{
+			"default": "0",
 			"fieldname": "enable_healthcare",
 			"fieldtype": "Check",
 			"label": "Healthcare / clinics"

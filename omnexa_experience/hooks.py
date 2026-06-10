@@ -31,8 +31,12 @@ required_apps = ["omnexa_core", "omnexa_accounting"]
 web_include_css = [
 	"/assets/omnexa_experience/css/design_tokens.css",
 	"/assets/omnexa_experience/css/portal_shell.css",
+	"/assets/omnexa_experience/css/activity_pro_theme.css",
 ]
-web_include_js = "/assets/omnexa_experience/js/portal_shell.js"
+web_include_js = [
+	"/assets/omnexa_experience/js/portal_shell.js",
+	"/assets/omnexa_experience/js/activity_site.js",
+]
 
 doctype_js = {
 	"Experience Portal Hub": "omnexa_experience/doctype/experience_portal_hub/experience_portal_hub.js",

@@ -142,35 +142,95 @@
 			const verticals = cfg.verticals || [];
 			const subPortals = cfg.sub_portals || [];
 			const urls = cfg.urls || {};
+			const primary = verticals.find((v) => v.is_primary) || verticals[0];
+			const activity = cfg.business_activity || "General";
+			const heroText = this.lang === "ar" ? (cfg.hero_text_ar || "") : (cfg.hero_text_en || "");
+			const tagline = this.text("tagline");
+			const icon = primary ? primary.icon : "🌐";
+
+			const activitySite = urls.activity_site || urls.hospital;
+			if (activitySite && this.page === "home" && cfg.layout_mode === "single_activity") {
+				window.location.replace(activitySite);
+				return;
+			}
+
+			const primaryCta = this.buildPrimaryCta(primary, urls, subPortals);
+			const subPortalCards = subPortals.map((p) =>
+				`<a class="oxp-card oxp-card-link" href="${this.esc(p.route)}${this.q()}">
+					<div class="oxp-icon">${p.icon}</div>
+					<strong>${this.esc(this.lang === "ar" ? p.name_ar : p.name_en)}</strong>
+				</a>`
+			).join("");
 
 			hero.innerHTML = `
-				<section class="oxp-hero"><div class="oxp-wrap">
-					<h1>${this.esc(this.text("tagline"))}</h1>
-					<p>${this.esc(this.name())} — ${this.lang === "ar" ? "بوابة موحدة لجميع أنشطة ERP" : "Unified ERP business portal"}</p>
-				</div></section>
-				<div class="oxp-wrap"><div class="oxp-subhero">
-					${urls.hospital ? `<a class="oxp-btn oxp-btn-primary" href="${this.esc(urls.hospital)}">${this.lang === "ar" ? "موقع المستشفى" : "Hospital site"}</a>` : ""}
-					<a class="oxp-btn oxp-btn-light" href="/portal/customer${this.q()}" style="margin-inline-start:8px;">${this.t("shop")}</a>
-				</div></div>
-				<section class="oxp-section"><div class="oxp-wrap">
-					<div class="oxp-section-title"><h2>${this.t("activities")}</h2><p>${this.lang === "ar" ? "اختر نشاطك التجاري" : "Choose your business activity"}</p></div>
-					<div class="oxp-grid-4">${verticals.map((v) =>
-						`<a class="oxp-card oxp-card-link" href="/portal/vertical/${this.esc(v.id)}${this.q()}">
-							<div class="oxp-icon">${v.icon}</div>
-							<strong>${this.esc(this.lang === "ar" ? v.name_ar : v.name_en)}</strong>
-						</a>`
-					).join("") || `<div class="oxp-empty">${this.lang === "ar" ? "فعّل التطبيقات من إعدادات البوابة" : "Enable apps in Portal Hub settings"}</div>`}
+				<section class="oxp-hero oxp-hero-single"><div class="oxp-wrap oxp-hero-single-grid">
+					<div>
+						<div class="oxp-activity-badge">${icon} ${this.esc(activity)}</div>
+						<h1>${this.esc(tagline)}</h1>
+						<p class="oxp-hero-lead">${this.esc(heroText)}</p>
+						<p class="oxp-hero-sub">${this.esc(this.name())}</p>
+						<div class="oxp-hero-actions">${primaryCta}</div>
+					</div>
+					<div class="oxp-hero-panel">
+						<div class="oxp-hero-panel-icon">${icon}</div>
+						<h3>${this.esc(primary ? (this.lang === "ar" ? primary.name_ar : primary.name_en) : this.name())}</h3>
 					</div>
 				</div></section>
+				${subPortals.length ? `
 				<section class="oxp-section"><div class="oxp-wrap">
-					<div class="oxp-section-title"><h2>${this.t("portals")}</h2><p>${this.lang === "ar" ? "بوابات المستخدمين" : "User sub-portals"}</p></div>
-					<div class="oxp-grid-5">${subPortals.map((p) =>
-						`<a class="oxp-card oxp-card-link" href="${this.esc(p.route)}${this.q()}">
-							<div class="oxp-icon">${p.icon}</div>
-							<strong>${this.esc(this.lang === "ar" ? p.name_ar : p.name_en)}</strong>
-						</a>`
-					).join("")}</div>
-				</div></section>`;
+					<div class="oxp-section-title"><h2>${this.t("portals")}</h2></div>
+					<div class="oxp-grid-${Math.min(subPortals.length, 4)}">${subPortalCards}</div>
+				</div></section>` : ""}
+				<div id="oxp-home-snapshot" class="oxp-wrap oxp-section"></div>`;
+
+			if (primary) {
+				const snap = await frappe.call({
+					method: "omnexa_experience.omnexa_experience.public_portal.get_vertical_page",
+					args: { ...this.args(), vertical: primary.id },
+				});
+				const data = snap.message || {};
+				const items = data.items || [];
+				const actions = data.actions || [];
+				const el = document.getElementById("oxp-home-snapshot");
+				if (el && (items.length || actions.length)) {
+					el.innerHTML = `
+						<div class="oxp-section-title"><h2>${this.lang === "ar" ? "خدماتنا" : "Our services"}</h2></div>
+						${actions.length ? `<div class="oxp-hero-actions" style="margin-bottom:16px;">${actions.map((a) =>
+							`<a class="oxp-btn oxp-btn-primary" href="${this.esc(a.url)}">${this.esc(a.label)}</a>`
+						).join("")}</div>` : ""}
+						<div class="oxp-grid-3">${items.slice(0, 6).map((item) =>
+							`<div class="oxp-card"><strong>${this.esc(item.service_title || item.title_en || item.title_ar || item.resource_name || item.project_name || item.name || "")}</strong>
+							${item.default_rate ? `<div>${this.esc(String(item.default_rate))}</div>` : ""}</div>`
+						).join("")}</div>`;
+				}
+			}
+		},
+
+		buildPrimaryCta(primary, urls, subPortals) {
+			const q = this.q();
+			if (primary && primary.id === "healthcare" && urls.hospital) {
+				return `<a class="oxp-btn oxp-btn-primary" href="${this.esc(urls.hospital)}">${this.lang === "ar" ? "الموقع الطبي" : "Medical site"}</a>`;
+			}
+			if (primary && primary.id === "trading") {
+				return `<a class="oxp-btn oxp-btn-primary" href="/portal/customer${q}">${this.t("shop")}</a>`;
+			}
+			if (primary && primary.id === "education") {
+				return `<a class="oxp-btn oxp-btn-primary" href="/portal/customer${q}">${this.lang === "ar" ? "التقديم" : "Apply"}</a>`;
+			}
+			if (primary && primary.id === "finance") {
+				return `<a class="oxp-btn oxp-btn-primary" href="/portal/loan${q}">${this.lang === "ar" ? "طلب تمويل" : "Apply for finance"}</a>`;
+			}
+			if (primary && primary.id === "tourism") {
+				return `<a class="oxp-btn oxp-btn-primary" href="/tourism${q}">${this.lang === "ar" ? "احجز الآن" : "Book now"}</a>`;
+			}
+			const customer = subPortals.find((p) => p.id === "customer");
+			if (customer) {
+				return `<a class="oxp-btn oxp-btn-primary" href="${this.esc(customer.route)}${q}">${this.t("shop")}</a>`;
+			}
+			if (primary) {
+				return `<a class="oxp-btn oxp-btn-primary" href="/portal/vertical/${this.esc(primary.id)}${q}">${this.lang === "ar" ? "استكشف" : "Explore"}</a>`;
+			}
+			return "";
 		},
 
 		async renderVertical() {
