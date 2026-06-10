@@ -35,6 +35,10 @@ class TestPublicPortal(FrappeTestCase):
 		cfg = get_portal_config(site="test-portal")
 		self.assertEqual(cfg["company"], self.company)
 
+	def test_get_portal_config_without_params(self):
+		cfg = get_portal_config()
+		self.assertEqual(cfg["company"], self.company)
+
 	def test_build_portal_urls(self):
 		urls = build_portal_urls(company=self.company, site_slug="test-portal")
 		self.assertIn("/portal", urls["home"])

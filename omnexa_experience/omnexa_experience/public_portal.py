@@ -27,6 +27,42 @@ def _hub_doc(company: str):
 	return doc
 
 
+def _default_portal_context() -> dict | None:
+	"""Resolve tenant when /portal is opened without ?site= or ?company=."""
+	if frappe.db.exists("DocType", "Experience Portal Hub"):
+		hubs = frappe.get_all(
+			"Experience Portal Hub",
+			filters={"is_enabled": 1},
+			fields=["company", "default_branch", "site_slug"],
+			order_by="modified desc",
+			limit=1,
+		)
+		if hubs:
+			row = hubs[0]
+			return {
+				"company": row.company,
+				"branch": row.default_branch or frappe.db.get_value("Branch", {"company": row.company}, "name"),
+				"site_slug": row.site_slug,
+			}
+
+	company = (
+		frappe.defaults.get_global_default("company")
+		or frappe.db.get_value("Company", {}, "name", order_by="creation asc")
+	)
+	if not company:
+		return None
+
+	branch = frappe.db.get_value("Branch", {"company": company}, "name", order_by="creation asc")
+	site_slug = None
+	if frappe.db.exists("DocType", "Experience Portal Hub"):
+		site_slug = frappe.db.get_value(
+			"Experience Portal Hub",
+			{"company": company, "is_enabled": 1},
+			"site_slug",
+		)
+	return {"company": company, "branch": branch, "site_slug": site_slug}
+
+
 def resolve_portal(*, site: str | None = None, company: str | None = None, branch: str | None = None) -> dict:
 	if site:
 		row = frappe.db.get_value(
@@ -57,6 +93,12 @@ def resolve_portal(*, site: str | None = None, company: str | None = None, branc
 			"branch": branch or (hub.default_branch if hub else frappe.db.get_value("Branch", {"company": company}, "name")),
 			"site_slug": hub.site_slug if hub else None,
 		}
+
+	ctx = _default_portal_context()
+	if ctx:
+		if branch:
+			ctx["branch"] = branch
+		return ctx
 
 	frappe.throw(_("Site slug or company is required."))
 
