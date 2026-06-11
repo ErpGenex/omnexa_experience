@@ -28,10 +28,10 @@ def enforce_supported_frappe_version():
 
 def _ensure_portal_roles():
 	roles = (
-		("Portal Customer",),
-		("Portal Doctor",),
-		("Portal Supplier",),
-		("Portal Loan Client",),
+		"Portal Customer",
+		"Portal Doctor",
+		"Portal Supplier",
+		"Portal Loan Client",
 	)
 	for role_name in roles:
 		if frappe.db.exists("Role", role_name):
