@@ -18,6 +18,15 @@ from omnexa_experience.omnexa_experience.portal_registry import activity_profile
 
 DEMO_MARKER = "DEMO-ACT-"
 
+
+def _healthcare_demo_hero_image() -> str:
+	try:
+		from omnexa_healthcare.alhayat_demo_assets import HERO_IMAGE
+
+		return HERO_IMAGE
+	except Exception:
+		return default_hero_image("Healthcare")
+
 CATALOG_BY_ACTIVITY: dict[str, list[tuple[str, str, str, str]]] = {
 	"Trading": [
 		("smart-watch", "Smart Watch Pro", "ساعة ذكية برو", "product"),
@@ -328,7 +337,7 @@ def _seed_healthcare_demo(company: str, branch: str, patients: int, force: int) 
 		frappe.db.set_value(
 			"Healthcare Branch Website",
 			branch,
-			{"hero_image": default_hero_image("Healthcare")},
+			{"hero_image": _healthcare_demo_hero_image()},
 			update_modified=False,
 		)
 	slug = frappe.db.get_value("Healthcare Branch Website", branch, "site_slug")
