@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import frappe
 
+from omnexa_experience.omnexa_experience.activity_demo_assets import activity_testimonials, premium_hero_image
 from omnexa_experience.omnexa_experience.activity_sites import (
 	activity_features,
 	activity_nav,
@@ -87,7 +88,7 @@ def get_activity_site_pack_api(
 		"tagline_en": hub.get("tagline_en") or profile.get("tagline_en"),
 		"hero_text_ar": profile.get("hero_ar"),
 		"hero_text_en": profile.get("hero_en"),
-		"hero_image": hub.get("hero_image") or default_hero_image(activity),
+		"hero_image": hub.get("hero_image") or premium_hero_image(activity) or default_hero_image(activity),
 		"logo": hub.get("logo"),
 		"primary_color": hub.get("primary_color") or profile.get("accent") or "#003366",
 		"contact": {
@@ -98,6 +99,7 @@ def get_activity_site_pack_api(
 		"features": activity_features(activity),
 		"stats": activity_stats(activity),
 		"service_cards": service_cards(activity),
+		"testimonials": activity_testimonials(activity),
 		"products": products,
 		"programs": programs,
 		"loan_products": loan_products,

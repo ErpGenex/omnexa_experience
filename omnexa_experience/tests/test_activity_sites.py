@@ -65,3 +65,4 @@ class TestActivitySites(FrappeTestCase):
 		self.assertEqual(pack["base_path"], "/store")
 		self.assertTrue(pack.get("hero_image"))
 		self.assertTrue(pack.get("nav"))
+		self.assertTrue(pack.get("testimonials"))

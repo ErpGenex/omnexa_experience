@@ -9,6 +9,7 @@ import frappe
 from frappe import _
 from frappe.utils import cint, get_url
 
+from omnexa_experience.omnexa_experience.activity_demo_assets import premium_hero_image
 from omnexa_experience.omnexa_experience.activity_sites import (
 	activity_site_path,
 	build_activity_site_url,
@@ -95,9 +96,9 @@ TOURISM_ROOMS: list[tuple[str, str, float]] = [
 ]
 
 
-def _assert_system_manager() -> None:
-	if "System Manager" not in (frappe.get_roles() or []) and frappe.session.user != "Administrator":
-		frappe.throw(_("Not permitted"), frappe.PermissionError)
+def _assert_administrator() -> None:
+	if frappe.session.user != "Administrator":
+		frappe.throw(_("Only Administrator can seed activity website demos."), frappe.PermissionError)
 
 
 def _resolve_branch(company: str, branch: str | None) -> str:
@@ -114,6 +115,12 @@ def _resolve_branch(company: str, branch: str | None) -> str:
 	return any_branch
 
 
+def _hero_for_activity(activity: str) -> str:
+	if activity == "Healthcare":
+		return _healthcare_demo_hero_image()
+	return premium_hero_image(activity)
+
+
 def _hub_branding(activity: str, company: str) -> dict:
 	profile = activity_profile(activity)
 	company_name = frappe.db.get_value("Company", company, "company_name") or company
@@ -123,7 +130,7 @@ def _hub_branding(activity: str, company: str) -> dict:
 		"tagline_ar": profile.get("tagline_ar"),
 		"tagline_en": profile.get("tagline_en"),
 		"primary_color": profile.get("accent") or "#003366",
-		"hero_image": default_hero_image(activity),
+		"hero_image": _hero_for_activity(activity),
 		"contact_phone": "+966 50 000 0000",
 		"contact_email": "info@example.com",
 		"follow_company_activity": 1,
@@ -366,7 +373,7 @@ def seed_company_activity_website(
 	patients: int | str | None = 20,
 ) -> dict:
 	"""Seed a complete public activity website demo from Company settings."""
-	_assert_system_manager()
+	_assert_administrator()
 	if not company or not frappe.db.exists("Company", company):
 		frappe.throw(_("Company is required"))
 
