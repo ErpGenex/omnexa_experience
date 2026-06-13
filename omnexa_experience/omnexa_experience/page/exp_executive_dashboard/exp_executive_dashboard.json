@@ -1,0 +1,16 @@
+{
+	"doctype": "Page",
+	"module": "Omnexa Experience",
+	"name": "exp-executive-dashboard",
+	"page_name": "exp-executive-dashboard",
+	"standard": "Yes",
+	"title": "Executive Dashboard",
+	"roles": [
+		{
+			"role": "System Manager"
+		},
+		{
+			"role": "All"
+		}
+	]
+}
