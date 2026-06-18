@@ -87,3 +87,9 @@ def after_migrate():
 	_ensure_portal_roles()
 	_ensure_default_theme()
 	_ensure_default_portal_hub()
+	try:
+		from omnexa_experience.commerce_desk_sync import sync_commerce_workspace
+
+		sync_commerce_workspace()
+	except Exception:
+		frappe.log_error(frappe.get_traceback(), "omnexa_experience: sync Commerce workspace")
