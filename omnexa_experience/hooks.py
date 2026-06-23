@@ -63,6 +63,7 @@ update_website_context = [
 # Public preview URL support for Experience Tenant Theme (query params)
 before_request = [
 	"omnexa_experience.omnexa_experience.theme_preview.before_request_theme_preview",
+	"omnexa_experience.omnexa_experience.activity_legacy_redirect.before_request_legacy_activity_redirect",
 ]
 
 # include custom scss in every website theme (without file extension ".scss")

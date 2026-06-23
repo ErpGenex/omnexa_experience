@@ -182,6 +182,11 @@ def get_portal_config(site: str | None = None, company: str | None = None, branc
 	# Legacy alias for healthcare hospital site
 	if urls.get("activity_site") and activity == "Healthcare":
 		urls["hospital"] = urls["activity_site"]
+	elif activity == "Education":
+		urls["student_portal"] = "/app/education-student-portal"
+		urls["parent_portal"] = "/app/education-parent-mobile"
+		urls["faculty_portal"] = "/app/education-teacher-gradebook"
+		urls["education_site"] = urls.get("activity_site")
 	elif branch and "omnexa_healthcare" in frappe.get_installed_apps():
 		hospital_slug = frappe.db.get_value("Healthcare Branch Website", {"branch": branch, "is_enabled": 1}, "site_slug")
 		if hospital_slug:

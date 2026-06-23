@@ -291,7 +291,7 @@ ACTIVITY_STATS: dict[str, list[dict]] = {
 ACTIVITY_SITE_PATHS: dict[str, str] = {
 	"Healthcare": "/hospital",
 	"Trading": "/store",
-	"Education": "/campus",
+	"Education": "/education",
 	"Manufacturing": "/factory",
 	"Tourism": "/stay",
 	"Hotel Assets": "/stay",
@@ -312,9 +312,9 @@ ACTIVITY_NAV: dict[str, list[dict]] = {
 		{"key": "order", "ar": "اطلب الآن", "en": "Order now", "href": "/store/order", "cta": True},
 	],
 	"Education": [
-		{"key": "home", "ar": "الرئيسية", "en": "Home", "href": "/campus"},
-		{"key": "programs", "ar": "البرامج", "en": "Programs", "href": "/campus/programs"},
-		{"key": "apply", "ar": "قدّم الآن", "en": "Apply now", "href": "/campus/apply", "cta": True},
+		{"key": "home", "ar": "الرئيسية", "en": "Home", "href": "/education"},
+		{"key": "programs", "ar": "البرامج", "en": "Programs", "href": "/education/programs"},
+		{"key": "apply", "ar": "قدّم الآن", "en": "Apply now", "href": "/education/apply", "cta": True},
 	],
 	"Manufacturing": [
 		{"key": "home", "ar": "الرئيسية", "en": "Home", "href": "/factory"},
@@ -375,6 +375,11 @@ ACTIVITY_NAV: dict[str, list[dict]] = {
 
 
 def activity_site_path(activity: str) -> str:
+	from omnexa_experience.omnexa_experience.activity_website_registry import activity_site_path_for
+
+	registered = activity_site_path_for(activity)
+	if registered:
+		return registered
 	return ACTIVITY_SITE_PATHS.get(activity, "/services-site")
 
 
@@ -436,6 +441,11 @@ def resolve_public_site_url(
 
 
 def activity_nav(activity: str) -> list[dict]:
+	from omnexa_experience.omnexa_experience.activity_website_registry import activity_nav_for
+
+	registered = activity_nav_for(activity)
+	if registered:
+		return registered
 	return ACTIVITY_NAV.get(activity, ACTIVITY_NAV["General"])
 
 

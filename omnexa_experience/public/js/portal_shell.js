@@ -215,7 +215,8 @@
 				return `<a class="oxp-btn oxp-btn-primary" href="/portal/customer${q}">${this.t("shop")}</a>`;
 			}
 			if (primary && primary.id === "education") {
-				return `<a class="oxp-btn oxp-btn-primary" href="/portal/customer${q}">${this.lang === "ar" ? "التقديم" : "Apply"}</a>`;
+				return `<a class="oxp-btn oxp-btn-primary" href="/education/apply${q}">${this.lang === "ar" ? "التقديم الأونلاين" : "Apply online"}</a>
+					<a class="oxp-btn oxp-btn-outline" href="${this.esc(urls.student_portal || "/app/education-student-portal")}">${this.lang === "ar" ? "بوابة الطالب" : "Student portal"}</a>`;
 			}
 			if (primary && primary.id === "finance") {
 				return `<a class="oxp-btn oxp-btn-primary" href="/portal/loan${q}">${this.lang === "ar" ? "طلب تمويل" : "Apply for finance"}</a>`;

@@ -126,7 +126,13 @@ def _education_snapshot(company: str, branch: str | None, base: dict) -> dict:
 			limit=5,
 		)
 		out["items"] = institutions
-		out["actions"].append({"label": "Apply online", "url": f"/portal/customer?company={company}"})
+		out["actions"].extend(
+			[
+				{"label": "Apply online", "url": "/education/apply"},
+				{"label": "Student portal", "url": "/app/education-student-portal"},
+				{"label": "Parent portal", "url": "/app/education-parent-mobile"},
+			]
+		)
 	return out
 
 

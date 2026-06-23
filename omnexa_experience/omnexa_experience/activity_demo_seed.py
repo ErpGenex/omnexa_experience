@@ -217,55 +217,25 @@ def _seed_education_demo(company: str, branch: str, force: int) -> dict:
 	if "omnexa_education" not in (frappe.get_installed_apps() or []):
 		return {"skipped": True, "reason": "omnexa_education not installed"}
 	if not frappe.db.exists("DocType", "Education Institution"):
-		return {"skipped": True}
+		return {"skipped": True, "reason": "Education Institution DocType missing"}
 
-	code = f"{DEMO_MARKER}MAIN"
-	inst_name = f"{company}-{code}"
-	if frappe.db.exists("Education Institution", inst_name):
-		institution = inst_name
-	elif force:
-		institution = inst_name
-	else:
-		institution = frappe.db.get_value("Education Institution", {"company": company}, "name")
-		if institution:
-			return {"institution": institution, "message": "already_exists"}
+	from omnexa_education.education_demo.education_demo_seed import _resolve_company_branch, seed_education_demo
 
-	if not frappe.db.exists("Education Institution", inst_name):
-		frappe.get_doc(
-			{
-				"doctype": "Education Institution",
-				"institution_code": code,
-				"institution_name": f"{DEMO_MARKER} ErpGenEx Academy",
-				"company": company,
-				"institution_type": "University",
-				"status": "Active",
-				"website": f"https://campus.example/{frappe.scrub(company)}",
+	company, branch = _resolve_company_branch(company, branch)
+	if not force:
+		existing = frappe.db.get_value("Education Institution", {"company": company}, "name")
+		if existing:
+			return {
+				"institution": existing,
+				"message": "already_exists",
+				"site_path": activity_site_path("Education"),
+				"site_url": build_activity_site_url(company=company, activity="Education", branch=branch),
 			}
-		).insert(ignore_permissions=True)
-		institution = inst_name
 
-	programs: list[str] = []
-	if frappe.db.exists("DocType", "Education Program"):
-		for prog_code, prog_name, level in EDUCATION_PROGRAMS:
-			full_code = f"{DEMO_MARKER}{prog_code}"
-			if frappe.db.exists("Education Program", full_code):
-				programs.append(full_code)
-				continue
-			frappe.get_doc(
-				{
-					"doctype": "Education Program",
-					"program_code": full_code,
-					"program_name": f"{DEMO_MARKER} {prog_name}",
-					"institution": institution,
-					"company": company,
-					"branch": branch,
-					"degree_level": level,
-					"is_active": 1,
-				}
-			).insert(ignore_permissions=True)
-			programs.append(full_code)
-
-	return {"institution": institution, "programs": programs}
+	result = seed_education_demo(company=company, branch=branch, institution_type="University")
+	result["site_path"] = activity_site_path("Education")
+	result["site_url"] = build_activity_site_url(company=company, activity="Education", branch=branch)
+	return result
 
 
 def _seed_tourism_demo(company: str, branch: str) -> dict:
