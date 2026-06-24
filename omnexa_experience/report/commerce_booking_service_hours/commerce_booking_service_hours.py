@@ -4,6 +4,8 @@
 
 import frappe
 from frappe import _
+
+from omnexa_core.omnexa_core.utils.report_charts import auto_chart_for_columns
 from frappe.utils import flt
 
 from omnexa_core.omnexa_core.branch_access import get_allowed_branches
@@ -56,7 +58,9 @@ def execute(filters=None):
 		r["service_minutes_total"] = flt(r.get("service_minutes_total"), 2)
 		r["service_minutes_avg"] = flt(r.get("service_minutes_avg"), 2)
 		r["service_hours_total"] = flt((r.get("service_minutes_total") or 0) / 60.0, 2)
-	return _columns(), rows
+	columns = _columns()
+	chart = auto_chart_for_columns(rows, columns)
+	return columns, rows, None, chart
 
 
 def _columns():

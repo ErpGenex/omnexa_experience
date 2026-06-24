@@ -4,6 +4,8 @@
 
 import frappe
 from frappe import _
+
+from omnexa_core.omnexa_core.utils.report_charts import auto_chart_for_columns
 from frappe.utils import flt
 
 from omnexa_core.omnexa_core.branch_access import get_allowed_branches
@@ -67,7 +69,9 @@ def execute(filters=None):
 		r["order_count"] = int(r.get("order_count") or 0)
 		r["avg_days_to_invoice_proxy"] = flt(r.get("avg_days_to_invoice_proxy"), 2)
 		r["avg_days_to_fulfillment_proxy"] = flt(r.get("avg_days_to_fulfillment_proxy"), 2)
-	return _columns(), rows
+	columns = _columns()
+	chart = auto_chart_for_columns(rows, columns)
+	return columns, rows, None, chart
 
 
 def _columns():

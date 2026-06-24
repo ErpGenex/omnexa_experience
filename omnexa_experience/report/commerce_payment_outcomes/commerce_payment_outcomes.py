@@ -4,6 +4,8 @@
 import frappe
 from frappe import _
 
+from omnexa_core.omnexa_core.utils.report_charts import auto_chart_for_columns
+
 from omnexa_core.omnexa_core.report_print.report_query_filters import (
 	get_all_filters,
 	policy_version_filters,
@@ -37,4 +39,5 @@ def execute(filters=None):
 		params,
 		as_dict=True,
 	)
-	return columns, rows
+	chart = auto_chart_for_columns(rows, columns)
+	return columns, rows, None, chart

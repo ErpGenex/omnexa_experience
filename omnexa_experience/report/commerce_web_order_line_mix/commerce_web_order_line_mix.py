@@ -4,6 +4,8 @@
 
 import frappe
 from frappe import _
+
+from omnexa_core.omnexa_core.utils.report_charts import auto_chart_for_columns
 from frappe.utils import flt
 
 from omnexa_core.omnexa_core.branch_access import get_allowed_branches
@@ -56,7 +58,9 @@ def execute(filters=None):
 		r["amount_net"] = flt(r.get("amount_net"), 2)
 		r["tax_amount"] = flt(r.get("tax_amount"), 2)
 		r["order_count"] = int(r.get("order_count") or 0)
-	return _columns(), rows
+	columns = _columns()
+	chart = auto_chart_for_columns(rows, columns)
+	return columns, rows, None, chart
 
 
 def _columns():
