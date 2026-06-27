@@ -282,7 +282,11 @@ def create_guest_booking_hold(
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=25, seconds=3600, methods=["POST"])
-def confirm_guest_booking(booking: str | None = None, company: str | None = None):
+def confirm_guest_booking(
+	booking: str | None = None,
+	company: str | None = None,
+	payment_intent: str | None = None,
+):
 	"""
 	Promote a **Draft** hold to **Confirmed**. Idempotent if already confirmed.
 	Raises if the hold TTL has passed (``hold_expires_at`` < now).
@@ -308,6 +312,8 @@ def confirm_guest_booking(booking: str | None = None, company: str | None = None
 		doc = frappe.get_doc("Booking", booking)
 		if doc.company != company:
 			frappe.throw(_("Booking does not belong to this company."), title=_("Booking"))
+		if payment_intent:
+			doc.payment_intent = payment_intent
 		doc.status = "Confirmed"
 		doc.hold_expires_at = None
 		doc.flags.ignore_permissions = True

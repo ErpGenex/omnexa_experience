@@ -65,8 +65,21 @@ class WebOrder(Document):
 		si.currency = frappe.db.get_value("Company", self.company, "default_currency")
 		si.customer = get_or_create_web_guest_customer(self.company)
 		si.posting_date = frappe.utils.today()
-		if self.branch and si.meta.has_field("branch"):
-			si.branch = self.branch
+		branch = (self.branch or "").strip()
+		if not branch and si.meta.has_field("branch"):
+			try:
+				from omnexa_core.omnexa_core.branch_access import get_default_branch
+
+				branch = get_default_branch(self.company) or ""
+			except Exception:
+				branch = frappe.db.get_value(
+					"Branch",
+					{"company": self.company, "status": "Active"},
+					"name",
+					order_by="is_head_office desc",
+				) or ""
+		if branch and si.meta.has_field("branch"):
+			si.branch = branch
 		for row in self.lines or []:
 			ci_name = row.catalog_item
 			slug = frappe.db.get_value("Catalog Item", ci_name, "slug") or ci_name

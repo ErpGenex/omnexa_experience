@@ -60,8 +60,24 @@ class TestOmnexaExperience(FrappeTestCase):
 		super().setUp()
 		ensure_pilot_geo()
 		self.company = create_test_company("OMNX-EXP")
+		self.branch = self._ensure_branch()
+
+	def _ensure_branch(self):
+		existing = frappe.db.get_value(
+			"Branch", {"company": self.company, "status": "Active"}, "name", order_by="creation asc"
+		)
+		if existing:
+			return existing
+		doc = frappe.new_doc("Branch")
+		doc.company = self.company
+		doc.branch_name = "Experience Test Branch"
+		doc.branch_code = f"EXP{frappe.generate_hash(length=4).upper()[:4]}"
+		doc.status = "Active"
+		doc.insert(ignore_permissions=True)
+		return doc.name
 
 	def _catalog(self, slug="sku-1"):
+		slug = f"{slug}-{frappe.generate_hash(length=6)}"
 		c = frappe.new_doc("Catalog Item")
 		c.company = self.company
 		c.slug = slug
@@ -108,11 +124,14 @@ class TestOmnexaExperience(FrappeTestCase):
 		res.insert(ignore_permissions=True)
 		start = now_datetime()
 		end = add_to_date(start, hours=1)
+		intent = self._create_payment_intent()
 		b1 = frappe.new_doc("Booking")
 		b1.company = self.company
 		b1.bookable_resource = res.name
 		b1.start_datetime = start
 		b1.end_datetime = end
+		b1.customer_email = "overlap@example.com"
+		b1.payment_intent = intent.name
 		b1.status = "Confirmed"
 		b1.insert(ignore_permissions=True)
 		b2 = frappe.new_doc("Booking")
@@ -120,6 +139,8 @@ class TestOmnexaExperience(FrappeTestCase):
 		b2.bookable_resource = res.name
 		b2.start_datetime = add_to_date(start, minutes=30)
 		b2.end_datetime = add_to_date(end, minutes=30)
+		b2.customer_email = "other@example.com"
+		b2.payment_intent = intent.name
 		b2.status = "Confirmed"
 		with self.assertRaises(frappe.ValidationError):
 			b2.insert(ignore_permissions=True)
@@ -155,15 +176,21 @@ class TestOmnexaExperience(FrappeTestCase):
 
 	def test_payment_webhook_duplicate_event_is_idempotent(self):
 		intent = self._create_payment_intent()
-		payload = {"payment_intent": intent.name, "status": "processing"}
+		payload = {
+			"payment_intent": intent.name,
+			"status": "processing",
+			"provider_reference": "txn-dup-001",
+		}
 		process_payment_intent_webhook(event_id="evt-pay-dup", payload=payload)
 		result = process_payment_intent_webhook(event_id="evt-pay-dup", payload=payload)
 		self.assertEqual(result["status"], "duplicate")
 
 	def test_guest_catalog_lists_published_only(self):
 		pub = self._catalog("guest-api-pub")
+		pub_slug = frappe.db.get_value("Catalog Item", pub, "slug")
 		frappe.db.set_value("Catalog Item", pub, "published", 1, update_modified=False)
 		priv = self._catalog("guest-api-priv")
+		priv_slug = frappe.db.get_value("Catalog Item", priv, "slug")
 		frappe.db.set_value("Catalog Item", priv, "published", 0, update_modified=False)
 		frappe.set_user("Guest")
 		try:
@@ -171,18 +198,19 @@ class TestOmnexaExperience(FrappeTestCase):
 		finally:
 			frappe.set_user("Administrator")
 		slugs = {r["slug"] for r in out["items"]}
-		self.assertIn("guest-api-pub", slugs)
-		self.assertNotIn("guest-api-priv", slugs)
+		self.assertIn(pub_slug, slugs)
+		self.assertNotIn(priv_slug, slugs)
 
 	def test_guest_catalog_get_by_slug(self):
 		ci = self._catalog("slug-detail-1")
+		slug = frappe.db.get_value("Catalog Item", ci, "slug")
 		frappe.db.set_value("Catalog Item", ci, "published", 1, update_modified=False)
 		frappe.set_user("Guest")
 		try:
-			row = get_published_catalog_item(company=self.company, slug="slug-detail-1")
+			row = get_published_catalog_item(company=self.company, slug=slug)
 		finally:
 			frappe.set_user("Administrator")
-		self.assertEqual(row["slug"], "slug-detail-1")
+		self.assertEqual(row["slug"], slug)
 		self.assertEqual(row["name"], ci)
 
 	def test_guest_cart_creates_draft_web_order(self):
@@ -286,27 +314,50 @@ class TestOmnexaExperience(FrappeTestCase):
 		finally:
 			frappe.set_user("Administrator")
 
+	def _ensure_tax_rule(self):
+		if not frappe.db.exists("DocType", "Tax Rule"):
+			return
+		if frappe.db.exists("Tax Rule", {"company": self.company}):
+			return
+		from frappe.utils import add_years, today
+
+		tax_gl = self._income_gl(number="8810", name="Web Checkout VAT")
+		frappe.get_doc(
+			{
+				"doctype": "Tax Rule",
+				"title": f"Default VAT {self.company}",
+				"company": self.company,
+				"valid_from": today(),
+				"valid_to": add_years(today(), 5),
+				"tax_type": "standard",
+				"rate": 0,
+				"account_head": tax_gl,
+			}
+		).insert(ignore_permissions=True)
+
 	def test_guest_checkout_submit_creates_sales_invoice(self):
 		self._income_gl()
+		self._ensure_tax_rule()
 		ci = self._catalog("checkout-sku")
 		frappe.db.set_value("Catalog Item", ci, "published", 1, update_modified=False)
 		lines = [{"catalog_item": ci, "qty": 1, "rate": 42}]
+		checkout_key = f"checkout-idem-{frappe.generate_hash(length=6)}"
 		frappe.set_user("Guest")
 		try:
 			cart = create_guest_cart_web_order(
 				company=self.company,
-				idempotency_key="checkout-idem-1",
+				idempotency_key=checkout_key,
 				lines=lines,
 			)
 			out = submit_guest_web_order(
 				web_order=cart["name"],
 				company=self.company,
-				idempotency_key="checkout-idem-1",
+				idempotency_key=checkout_key,
 			)
 			out2 = submit_guest_web_order(
 				web_order=cart["name"],
 				company=self.company,
-				idempotency_key="checkout-idem-1",
+				idempotency_key=checkout_key,
 			)
 		finally:
 			frappe.set_user("Administrator")
@@ -314,7 +365,7 @@ class TestOmnexaExperience(FrappeTestCase):
 		self.assertEqual(out2["docstatus"], 1)
 		self.assertEqual(out["name"], out2["name"])
 		self.assertTrue(out.get("sales_invoice"))
-		self.assertEqual(out["status"], "Confirmed")
+		self.assertEqual(out["status"], "Invoiced")
 		pub = get_guest_web_order(web_order=cart["name"], company=self.company)
 		self.assertEqual(pub["sales_invoice"], out["sales_invoice"])
 
@@ -360,6 +411,8 @@ class TestOmnexaExperience(FrappeTestCase):
 		res = self._bookable_resource("Res B")
 		start = now_datetime()
 		end = add_to_date(start, hours=1)
+		intent = self._create_payment_intent().name
+		idem = f"bkg-1-{frappe.generate_hash(length=6)}"
 		frappe.set_user("Guest")
 		try:
 			b1 = create_guest_booking(
@@ -368,7 +421,8 @@ class TestOmnexaExperience(FrappeTestCase):
 				start_datetime=start,
 				end_datetime=end,
 				customer_email="a@example.com",
-				idempotency_key="bkg-1",
+				payment_intent=intent,
+				idempotency_key=idem,
 			)
 			b1b = create_guest_booking(
 				company=self.company,
@@ -376,7 +430,8 @@ class TestOmnexaExperience(FrappeTestCase):
 				start_datetime=start,
 				end_datetime=end,
 				customer_email="a@example.com",
-				idempotency_key="bkg-1",
+				payment_intent=intent,
+				idempotency_key=idem,
 			)
 			lst = list_confirmed_bookings_for_resource(
 				company=self.company,
@@ -400,6 +455,7 @@ class TestOmnexaExperience(FrappeTestCase):
 		res = self._bookable_resource("Res C")
 		start = now_datetime()
 		end = add_to_date(start, hours=1)
+		intent = self._create_payment_intent().name
 		frappe.set_user("Guest")
 		try:
 			create_guest_booking(
@@ -407,6 +463,8 @@ class TestOmnexaExperience(FrappeTestCase):
 				bookable_resource=res,
 				start_datetime=start,
 				end_datetime=end,
+				customer_email="overlap@example.com",
+				payment_intent=intent,
 				status="Confirmed",
 			)
 			with self.assertRaises(frappe.ValidationError):
@@ -415,6 +473,8 @@ class TestOmnexaExperience(FrappeTestCase):
 					bookable_resource=res,
 					start_datetime=add_to_date(start, minutes=30),
 					end_datetime=add_to_date(end, minutes=30),
+					customer_email="other@example.com",
+					payment_intent=intent,
 					status="Confirmed",
 				)
 		finally:
@@ -424,6 +484,7 @@ class TestOmnexaExperience(FrappeTestCase):
 		res = self._bookable_resource("Res Hold")
 		start = now_datetime()
 		end = add_to_date(start, hours=1)
+		intent = self._create_payment_intent().name
 		frappe.set_user("Guest")
 		try:
 			h = create_guest_booking_hold(
@@ -431,15 +492,20 @@ class TestOmnexaExperience(FrappeTestCase):
 				bookable_resource=res,
 				start_datetime=start,
 				end_datetime=end,
+				customer_email="hold@example.com",
 				idempotency_key="hold-idem-1",
 				hold_ttl_minutes=30,
 			)
 			self.assertEqual(h["status"], "Draft")
 			self.assertTrue(h.get("hold_expires_at"))
-			c = confirm_guest_booking(booking=h["name"], company=self.company)
+			c = confirm_guest_booking(
+				booking=h["name"], company=self.company, payment_intent=intent
+			)
 			self.assertEqual(c["status"], "Confirmed")
 			self.assertIsNone(c.get("hold_expires_at"))
-			c2 = confirm_guest_booking(booking=h["name"], company=self.company)
+			c2 = confirm_guest_booking(
+				booking=h["name"], company=self.company, payment_intent=intent
+			)
 			self.assertEqual(c2["status"], "Confirmed")
 		finally:
 			frappe.set_user("Administrator")
@@ -556,12 +622,14 @@ class TestOmnexaExperience(FrappeTestCase):
 			res = self._bookable_resource("Res Portal Me")
 			start = add_to_date(now_datetime(), days=1, as_datetime=True)
 			end = add_to_date(start, hours=2, as_datetime=True)
+			intent = self._create_payment_intent()
 			b = frappe.new_doc("Booking")
 			b.company = self.company
 			b.bookable_resource = res
 			b.start_datetime = start
 			b.end_datetime = end
 			b.customer_email = "booker@example.com"
+			b.payment_intent = intent.name
 			b.status = "Confirmed"
 			b.insert(ignore_permissions=True)
 			with patch.object(frappe, "get_request_header", return_value="Bearer portal-secret-3"):
@@ -577,12 +645,14 @@ class TestOmnexaExperience(FrappeTestCase):
 			res = self._bookable_resource("Res Portal Me Detail")
 			start = add_to_date(now_datetime(), days=2, as_datetime=True)
 			end = add_to_date(start, hours=1, as_datetime=True)
+			intent = self._create_payment_intent()
 			b = frappe.new_doc("Booking")
 			b.company = self.company
 			b.bookable_resource = res
 			b.start_datetime = start
 			b.end_datetime = end
 			b.customer_email = "owner@example.com"
+			b.payment_intent = intent.name
 			b.status = "Confirmed"
 			b.insert(ignore_permissions=True)
 			with patch.object(frappe, "get_request_header", return_value="Bearer portal-secret-4"):

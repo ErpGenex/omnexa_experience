@@ -31,9 +31,16 @@ def process_payment_intent_webhook(
 		if status not in ALLOWED_PAYMENT_INTENT_STATUS:
 			raise WebhookRejectedError(_("Invalid payment status received from webhook."))
 		doc = frappe.get_doc("Payment Intent", intent_name)
+		ref = (data.get("provider_reference") or "").strip()
+		if ref:
+			doc.client_secret_ref = ref
+			if status in {"processing", "succeeded", "refunded"} and not doc.payment_reference:
+				doc.payment_reference = ref
+		if status == "succeeded" and doc.status in {"requires_payment_method", "requires_confirmation"}:
+			doc.status = "processing"
+			doc.save(ignore_permissions=True)
+			doc.reload()
 		doc.status = status
-		if data.get("provider_reference"):
-			doc.client_secret_ref = data.get("provider_reference")
 		doc.save(ignore_permissions=True)
 
 	return process_webhook_event(
